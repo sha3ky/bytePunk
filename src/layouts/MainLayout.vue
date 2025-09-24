@@ -56,6 +56,14 @@
             </button>
           </div> -->
         </div>
+        <!--  <div class="logo-3d-container">
+          <iframe
+            src="https://my.spline.design/tu-escena/xyz123/"
+            frameborder="0"
+            width="100%"
+            height="500"
+          ></iframe>
+        </div> -->
       </q-page>
     </q-page-container>
   </q-layout>
@@ -91,29 +99,28 @@ const getPosition = (i) => {
   const isMobile = screenWidth.value < 768
 
   if (isMobile) {
-    const gapMobile = 88 // 88/2 = 44px
+    const gapVH = 6 // separación en vh (ajústalo entre 5–7)
     const positions = [
-      { transform: `translate(-50%, calc(-50% - ${gapMobile * 1.5}px))` }, // Inicio
-      { transform: `translate(-50%, calc(-50% - ${gapMobile - 20}px))` }, // Proyectos (-44px)
-      { transform: `translate(-50%, calc(-50% + ${gapMobile - 20}px))` }, // Contacto (+44px)
-      { transform: `translate(-50%, calc(-50% + ${gapMobile * 1.5}px))` }, // Sobre mí
+      { transform: `translate(-50%, calc(-50% - ${gapVH * 2}vh))` }, // Inicio
+      { transform: `translate(-50%, calc(-50% - ${gapVH}vh))` }, // Proyectos
+      { transform: `translate(-50%, calc(-50% + ${gapVH}vh))` }, // Contacto
+      { transform: `translate(-50%, calc(-50% + ${gapVH * 2}vh))` }, // Sobre mí
     ]
     return positions[i]
   }
 
-  // 💻 En desktop: radial
-  const r = 120
-  const btnWidth = 480
+  // Desktop (radial)
+  const r = 100
+  const btnWidth = 380
   const gap = 20
 
   const positions = [
-    { transform: `translate(-50%, calc(-50% - ${r}px))` }, // Inicio (arriba)
-    { transform: `translate(calc(-50% + ${btnWidth / 2 + gap}px), -50%)` }, // Proyectos (derecha)
-    { transform: `translate(-50%, calc(-50% + ${r}px))` }, // Contacto (abajo)
-    { transform: `translate(calc(-50% - ${btnWidth / 2 + gap}px), -50%)` }, // Sobre mí (izquierda)
+    { transform: `translate(-50%, calc(-50% - ${r}px))` },
+    { transform: `translate(calc(-50% + ${btnWidth / 2 + gap}px), -50%)` },
+    { transform: `translate(-50%, calc(-50% + ${r}px))` },
+    { transform: `translate(calc(-50% - ${btnWidth / 2 + gap}px), -50%)` },
   ]
-
-  return positions[i] || { transform: 'translate(-50%, -50%)' }
+  return positions[i]
 }
 
 /* -------- Particles -------- */

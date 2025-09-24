@@ -19,9 +19,10 @@ body {
 }
 
 body .cybr-btn + .cybr-btn {
-  margin-top: 2rem;
+  margin-top: 0rem;
 }
-
+/* 
+boton de cyberpunk calcado
 .cybr-btn {
   --primary: hsl(var(--primary-hue), 85%, calc(var(--primary-lightness, 50) * 1%));
   --shadow-primary: hsl(var(--shadow-primary-hue), 90%, 50%);
@@ -229,4 +230,181 @@ body .cybr-btn + .cybr-btn {
 
 .cybr-btn:nth-of-type(2) {
   --primary-hue: 260;
+}
+ */
+/* 
+.cybr-btn {
+  --primary: transparent; 
+  --shadow-primary: #00eaff; 
+  --shadow-secondary: #ff005d; 
+  --border: 3px;
+
+  font-family: 'Orbitron', sans-serif;
+  font-size: 22px;
+  text-transform: uppercase;
+  font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
+  cursor: pointer;
+
+  position: relative;
+  display: inline-block;
+  padding: 12px 40px;
+  background: transparent;
+  border: none;
+  z-index: 1;
+
+ 
+  box-shadow:
+    inset 0 0 10px rgba(0, 234, 255, 0.5),
+    0 0 20px rgba(0, 234, 255, 0.8),
+    0 0 40px rgba(255, 0, 93, 0.6);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: 0.2s ease;
+}
+
+.cybr-btn:hover {
+  box-shadow:
+    inset 0 0 15px rgba(0, 234, 255, 0.8),
+    0 0 25px rgba(0, 234, 255, 1),
+    0 0 50px rgba(255, 0, 93, 1);
+  color: #fcee09;
+
+ .cybr-btn__glitch {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 2px solid #fcee09;
+  border-radius: 6px;
+  animation: glitch-border 2s infinite;
+  pointer-events: none;
+} 
+
+@keyframes glitch-border {
+  0% {
+    clip-path: inset(0 0 95% 0);
+    border-color: #ff005d;
+  }
+  25% {
+    clip-path: inset(0 95% 0 0);
+    border-color: #00eaff;
+  }
+  50% {
+    clip-path: inset(95% 0 0 0);
+    border-color: #fcee09;
+  }
+  75% {
+    clip-path: inset(0 0 0 95%);
+    border-color: #ff005d;
+  }
+  100% {
+    clip-path: inset(0 0 95% 0);
+    border-color: #00eaff;
+  }
+}
+ */
+/* ultimo modelo
+ */
+.cybr-btn {
+  width: 280px;
+  height: 65px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+  border: none;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #fff;
+  letter-spacing: 2px;
+  -webkit-clip-path: polygon(6% 0, 93% 0, 100% 8%, 100% 86%, 90% 89%, 88% 100%, 5% 100%, 0% 85%);
+  clip-path: polygon(6% 0, 93% 0, 100% 8%, 100% 86%, 90% 89%, 88% 100%, 5% 100%, 0% 85%);
+  z-index: 1;
+}
+
+.cybr-btn .span {
+  display: flex;
+  -webkit-clip-path: polygon(6% 0, 93% 0, 100% 8%, 100% 86%, 90% 89%, 88% 100%, 5% 100%, 0% 85%);
+  clip-path: polygon(6% 0, 93% 0, 100% 8%, 100% 86%, 90% 89%, 88% 100%, 5% 100%, 0% 85%);
+  position: absolute;
+  inset: 1px;
+  background-color: #111; /* interior oscuro */
+  z-index: 1;
+}
+
+.cybr-btn .txt {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-size: 1rem;
+  text-shadow:
+    0px 0px 1px #4090b5,
+    0px 0px 1px #9e30a9,
+    0 0 3px white;
+  transition: color 0.3s ease;
+}
+
+/* Borde eléctrico animado */
+.cybr-btn::before {
+  content: '';
+  position: absolute;
+  height: 300px;
+  aspect-ratio: 1.5/1;
+  box-shadow: -17px -19px 20px #9e30a9;
+  background-image: conic-gradient(
+    #9e30a9,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    #9e30a9
+  );
+  animation: rotate 4s linear infinite -2s;
+}
+
+.cybr-btn::after {
+  content: '';
+  position: absolute;
+  height: 300px;
+  aspect-ratio: 1.5/1;
+  box-shadow: -17px -19px 10px #4090b5;
+  background-image: conic-gradient(
+    #4090b5,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    transparent,
+    #4090b5
+  );
+  animation: rotate 4s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.cybr-btn:hover .txt {
+  color: #fcee09; /* amarillo cyberpunk */
+  text-shadow:
+    0px 0px 4px #fcee09,
+    0 0 8px #00eaff,
+    0 0 12px #ff005d;
 }

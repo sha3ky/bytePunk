@@ -1,0 +1,82 @@
+.radial-menu {
+  position: relative;
+  width: 100%;
+  height: 50vh;
+  margin-top: 2vh;
+  z-index: 3;
+}
+
+.center-btn {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(60px, 35vw, 50px);
+  height: clamp(48px, 7vh, 45px);
+  font-size: 0.75rem;
+  z-index: 3;
+}
+
+.radial-items {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+}
+
+.radial-item {
+  width: 200px;
+  height: 45px;
+  cursor: pointer;
+}
+
+.radial-wrapper {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+/* Transiciones de aparición */
+.radial-enter-from,
+.radial-leave-to {
+  opacity: 0;
+  transform: scale(0.2);
+  filter: blur(8px) brightness(1.5);
+}
+
+.radial-enter-to,
+.radial-leave-from {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.radial-enter-active,
+.radial-leave-active {
+  transition: all 0.6s ease-out;
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .radial-menu {
+    height: 50vh;
+  }
+
+  .radial-item {
+    width: 150px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  .center-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+}

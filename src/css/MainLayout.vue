@@ -58,14 +58,35 @@
           </div>
         </div>
       </q-page>
+      <q-drawer
+        v-model="drawers.right"
+        side="right"
+        :overlay="true"
+        behavior="mobile"
+        class="metal-drawer animated-drawer"
+      >
+        <div class="drawer-content q-pa-md">
+          <q-card class="cyber-card">
+            <q-card-section>
+              <div class="text-h5">🚀 Proyectos</div>
+              <p>Aquí irán tus proyectos fullstack + IoT con un diseño brutal.</p>
+            </q-card-section>
+          </q-card>
+        </div>
+      </q-drawer>
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, reactive } from 'vue'
 const loading = ref(true)
-
+const drawers = reactive({
+  top: false,
+  right: false,
+  bottom: false,
+  left: false,
+})
 const screenWidth = ref(window.innerWidth)
 const updateWidth = () => (screenWidth.value = window.innerWidth)
 
@@ -81,11 +102,6 @@ const items = [
 ]
 
 const toggleMenu = () => (open.value = !open.value)
-
-const onItemClick = (item) => {
-  console.log('Click en', item.label)
-  open.value = false
-}
 
 // Nuevo cálculo de posiciones radiales
 const getPosition = (i) => {
@@ -108,6 +124,27 @@ const getWrapperStyle = (i) => {
     ...base,
     transitionDelay: `${i * 120}ms`,
   }
+}
+
+const onItemClick = (item) => {
+  open.value = false
+
+  setTimeout(() => {
+    switch (item.label) {
+      case 'Inicio':
+        drawers.right = true
+        break
+      case 'Proyectos':
+        drawers.bottom = true
+        break
+      case 'Contacto':
+        drawers.left = true
+        break
+      case 'Sobre mí':
+        drawers.top = true
+        break
+    }
+  }, 400) // espera la animación del menú radial
 }
 
 /* -------- Particles -------- */
@@ -317,108 +354,5 @@ onMounted(() => {
   text-shadow:
     0 0 5px rgba(255, 255, 255, 0.2),
     0 0 10px rgba(0, 234, 255, 0.1);
-}
-
-.radial-menu {
-  position: relative;
-  width: 100%;
-  height: 50vh;
-  margin-top: 2vh;
-  z-index: 3;
-}
-
-.center-btn {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: clamp(60px, 35vw, 50px);
-  height: clamp(48px, 7vh, 45px);
-  font-size: 0.75rem;
-  z-index: 3;
-}
-
-.radial-items {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-}
-
-.radial-item {
-  width: 200px;
-  height: 45px;
-  cursor: pointer;
-}
-
-.radial-wrapper {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-}
-
-/* Transiciones de aparición */
-.radial-enter-from,
-.radial-leave-to {
-  opacity: 0;
-  transform: scale(0.2);
-  filter: blur(8px) brightness(1.5);
-}
-
-.radial-enter-to,
-.radial-leave-from {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-}
-
-.radial-enter-active,
-.radial-leave-active {
-  transition: all 0.6s ease-out;
-}
-
-@media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-
-  .radial-menu {
-    height: 50vh;
-  }
-
-  .radial-item {
-    width: 150px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
-
-  .center-btn {
-    width: 150px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
-}
-/* esperar el loading */
-.loader-overlay {
-  position: fixed;
-  z-index: 9999;
-  top: 0;
-  left: 0;
-  height: 100vh;
-  width: 100vw;
-  background: #000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.loader-spinner {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
-  color: #fcee09;
-  animation: flicker 1.2s infinite;
 }
 </style>

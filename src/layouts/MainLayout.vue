@@ -41,29 +41,7 @@
               </button>
             </transition-group>
           </div>
-
-          <!-- <div class="hero-buttons">
-            <button class="cybr-btn">
-              Proyectos
-              <span aria-hidden class="cybr-btn__glitch">Proyectos</span>
-              <span aria-hidden class="cybr-btn__tag">R25</span>
-            </button>
-          </div> -->
-          <!--  <div class="hero-buttons">
-            <button class="cybr-btn">
-              <span class="span"></span>
-              <span class="txt">🚀 Proyectos</span>
-            </button>
-          </div> -->
         </div>
-        <!--  <div class="logo-3d-container">
-          <iframe
-            src="https://my.spline.design/tu-escena/xyz123/"
-            frameborder="0"
-            width="100%"
-            height="500"
-          ></iframe>
-        </div> -->
       </q-page>
     </q-page-container>
   </q-layout>
@@ -175,7 +153,7 @@ const particlesLoaded = async (container) => {
   left: 0;
   width: 100%;
   height: 100%;
-  background: url('/imagenes/city.jpg') no-repeat center center;
+  background: url('/imagenes/circuito.webp') no-repeat center center;
   background-size: cover;
   filter: brightness(0.4); /* oscurece un poco para contraste */
   z-index: 0;

@@ -122,3 +122,28 @@ body .cybr-btn + .cybr-btn {
     0 0 8px #00eaff,
     0 0 12px #ff005d;
 }
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-subtitle {
+    font-size: 1.2rem;
+  }
+
+  .radial-menu {
+    height: 50vh;
+  }
+
+  .radial-item {
+    width: 150px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+
+  .center-btn {
+    width: 150px;
+    height: 40px;
+    font-size: 0.9rem;
+  }
+}

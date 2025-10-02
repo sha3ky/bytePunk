@@ -86,17 +86,19 @@
 
             <!-- Mini secciones -->
             <div class="row justify-around q-mt-md section-preview">
-              <div class="col-4 text-center">
+              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
                 <q-icon name="code" size="60px" color="cyan" />
                 <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
                 <p class="text-grey-5">Apps web seguras y escalables.</p>
               </div>
-              <div class="col-4 text-center">
+
+              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
                 <q-icon name="memory" size="60px" color="purple" />
                 <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
                 <p class="text-grey-5">Automatización y análisis inteligente.</p>
               </div>
-              <div class="col-4 text-center">
+
+              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
                 <q-icon name="sensors" size="60px" color="amber" />
                 <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
                 <p class="text-grey-5">Domótica industrial y control en tiempo real.</p>

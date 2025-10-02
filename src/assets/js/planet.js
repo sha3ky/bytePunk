@@ -83,18 +83,14 @@ export function initPlanet(containerEl) {
   }
 }
  */
-// planet.js
+/*
+// planet.js — Texto 3D simple que gira
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
 import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 export function initPlanet(containerEl) {
   if (!containerEl) return () => {}
-
-  // Variables para la velocidad de rotación
-  let textRotationSpeed = 0.005
-  let textRotationSpeedX = 0.001
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -102,71 +98,43 @@ export function initPlanet(containerEl) {
   renderer.setSize(containerEl.offsetWidth, containerEl.offsetHeight)
   containerEl.appendChild(renderer.domElement)
 
-  // Scene & Camera
+  // Scene
   const scene = new THREE.Scene()
+
+  // Cámara perspectiva básica
   const camera = new THREE.PerspectiveCamera(
-    75,
+    45,
     containerEl.offsetWidth / containerEl.offsetHeight,
     0.1,
     1000,
   )
-  camera.position.z = 5
+  camera.position.set(0, 0, 5)
+  camera.lookAt(0, 0, 0)
 
-  // Luces
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
-  scene.add(ambientLight)
+  // Luz
+  const light = new THREE.DirectionalLight(0xffffff, 1)
+  light.position.set(2, 2, 5)
+  scene.add(light)
 
-  const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8)
-  directionalLight1.position.set(5, 5, 5)
-  scene.add(directionalLight1)
+  let textMesh = null
 
-  const directionalLight2 = new THREE.DirectionalLight(0xffffff, 0.4)
-  directionalLight2.position.set(-5, -5, -5)
-  scene.add(directionalLight2)
-
-  // Controles
-  const controls = new OrbitControls(camera, renderer.domElement)
-  controls.enableDamping = true
-  controls.dampingFactor = 0.05
-  controls.enableZoom = false
-  controls.autoRotate = false
-
-  // Variable para el objeto de texto (se inicializará dentro del callback)
-  let bytePunkText = null
-
-  // --- CARGA Y CREACIÓN DEL TEXTO 3D ---
+  // Fuente + texto
   const loader = new FontLoader()
-
-  loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
-    // Todo este código solo se ejecuta cuando la fuente está cargada.
-    const textGeometry = new TextGeometry('bytePunk', {
-      font: font,
-      size: 0.5, // Reducir un poco el tamaño
-      height: 0.1, // Reducir la profundidad
+  loader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', (font) => {
+    const geo = new TextGeometry('bytePunk', {
+      font,
+      size: 1, // tamaño frontal
+      height: 0.1, // grosor
       curveSegments: 12,
-      bevelEnabled: true,
-      bevelThickness: 0.01, // Reducir el biselado
-      bevelSize: 0.01,
-      bevelOffset: 0,
-      bevelSegments: 5,
     })
+    geo.center()
 
-    // Centrar la geometría es clave para la rotación y el posicionamiento
-    textGeometry.center()
+    const mat = new THREE.MeshStandardMaterial({ color: 0xffff00 })
+    textMesh = new THREE.Mesh(geo, mat)
+    scene.add(textMesh)
+  })
 
-    // Material dorado
-    const goldMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffd700,
-      metalness: 0.9,
-      roughness: 0.4,
-    })
-
-    // Asignamos el objeto a la variable del ámbito superior
-    bytePunkText = new THREE.Mesh(textGeometry, goldMaterial)
-    scene.add(bytePunkText)
-  }) // Fin del loader.load
-
-  // Handlers
+  // Resize handler
   const onResize = () => {
     const w = containerEl.offsetWidth
     const h = containerEl.offsetHeight
@@ -176,46 +144,137 @@ export function initPlanet(containerEl) {
   }
   window.addEventListener('resize', onResize)
 
-  const onMouseDown = () => {
-    textRotationSpeed = 0.03
-    textRotationSpeedX = 0.005
-  }
-  const onMouseUp = () => {
-    textRotationSpeed = 0.005
-    textRotationSpeedX = 0.001
-  }
-  renderer.domElement.addEventListener('mousedown', onMouseDown)
-  renderer.domElement.addEventListener('mouseup', onMouseUp)
-
-  // Loop (Animación)
+  // Animación
   let stopped = false
   const animate = () => {
     if (stopped) return
     requestAnimationFrame(animate)
 
-    // Solo rota el texto si ya se ha cargado y existe (es decir, no es null)
-    if (bytePunkText) {
-      bytePunkText.rotation.y += textRotationSpeed
-      bytePunkText.rotation.x += textRotationSpeedX
+    if (textMesh) {
+      textMesh.rotation.y += 0.01
     }
+
+    renderer.render(scene, camera)
+  }
+  animate()
+
+  // Cleanup
+  return () => {
+    stopped = true
+    window.removeEventListener('resize', onResize)
+    renderer.dispose()
+    containerEl.innerHTML = ''
+  }
+}
+ */
+
+// planet.js — Planeta futurista neon cyberpunk
+import * as THREE from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+
+export function initPlanet(containerEl) {
+  if (!containerEl) return () => {}
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+  renderer.setPixelRatio(window.devicePixelRatio)
+  renderer.setSize(containerEl.offsetWidth, containerEl.offsetHeight)
+  containerEl.appendChild(renderer.domElement)
+
+  const scene = new THREE.Scene()
+  const camera = new THREE.PerspectiveCamera(
+    60,
+    containerEl.offsetWidth / containerEl.offsetHeight,
+    0.1,
+    1000,
+  )
+  camera.position.set(0, 0, 5)
+
+  // Luces fuertes estilo neon
+  const ambient = new THREE.AmbientLight(0xffffff, 0.3)
+  scene.add(ambient)
+
+  const light1 = new THREE.PointLight(0x00ffff, 3, 50)
+  light1.position.set(5, 5, 5)
+  scene.add(light1)
+
+  const light2 = new THREE.PointLight(0xff00ff, 3, 50)
+  light2.position.set(-5, -5, -5)
+  scene.add(light2)
+
+  // Geometría planeta
+  const geometry = new THREE.SphereGeometry(1, 128, 128)
+
+  // Material base con neon
+  const material = new THREE.MeshStandardMaterial({
+    color: 0x111122,
+    metalness: 0.8,
+    roughness: 0.2,
+    emissive: 0x220044,
+    emissiveIntensity: 2.0,
+  })
+  const planet = new THREE.Mesh(geometry, material)
+  scene.add(planet)
+
+  // Wireframe de circuitos (más fuerte)
+  const wireMaterial = new THREE.MeshBasicMaterial({
+    color: 0x00ffff,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.4,
+  })
+  const planetWire = new THREE.Mesh(geometry, wireMaterial)
+  scene.add(planetWire)
+
+  // Aura (más intensa y grande)
+  // --- Aura (más sutil) ---
+  const glowGeo = new THREE.SphereGeometry(1.2, 64, 64) // apenas más grande que el planeta
+  const glowMat = new THREE.MeshBasicMaterial({
+    color: 0xff00ff,
+    transparent: true,
+    opacity: 0.3, // mucho más baja
+    blending: THREE.AdditiveBlending,
+    side: THREE.BackSide,
+  })
+  const glow = new THREE.Mesh(glowGeo, glowMat)
+  scene.add(glow)
+
+  // Controles
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.05
+  controls.enableZoom = false
+  controls.autoRotate = true
+  controls.autoRotateSpeed = 1.2
+
+  // Resize
+  const onResize = () => {
+    const w = containerEl.offsetWidth
+    const h = containerEl.offsetHeight
+    renderer.setSize(w, h)
+    camera.aspect = w / h
+    camera.updateProjectionMatrix()
+  }
+  window.addEventListener('resize', onResize)
+
+  // Animación
+  let stopped = false
+  const animate = () => {
+    if (stopped) return
+    requestAnimationFrame(animate)
+
+    planet.rotation.y += 0.003
+    planetWire.rotation.y += 0.003
+    glow.rotation.y += 0.001
 
     controls.update()
     renderer.render(scene, camera)
   }
   animate()
 
-  // Cleanup (Nota: Debes asegurarte de que los materiales y geometrías sean accesibles aquí si los usas)
-  return function destroy() {
+  return () => {
     stopped = true
     window.removeEventListener('resize', onResize)
-    renderer.domElement.removeEventListener('mousedown', onMouseDown)
-    renderer.domElement.removeEventListener('mouseup', onMouseUp)
     controls.dispose()
-    // Los siguientes solo se deben llamar si el objeto de texto fue creado
-    if (bytePunkText) {
-      bytePunkText.geometry.dispose()
-      bytePunkText.material.dispose()
-    }
     renderer.dispose()
     containerEl.innerHTML = ''
   }

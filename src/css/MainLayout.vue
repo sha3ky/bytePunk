@@ -66,12 +66,44 @@
         transition-show="slide-left"
         transition-hide="slide-right"
         class="animated-drawer"
+        @show="onDialogShow"
+        @hide="onDialogHide"
       >
         <q-card class="cyber-card metal-drawer">
-          <div><q-btn flat label="Cerrar" color="primary" v-close-popup /></div>
-          <q-card-section>
-            <div class="text-h5">Panel de Proyectos (Alternativa)</div>
-            <p>Este es un q-dialog actuando como un q-drawer.</p>
+          <!-- Botón de cerrar -->
+          <div>
+            <q-btn flat label="Cerrar" color="primary" v-close-popup />
+          </div>
+
+          <!-- Contenido del drawer -->
+          <q-card-section class="text-center">
+            <!-- Hero -->
+            <div class="text-h2 q-mb-sm neon-text text-grey-5">Construyendo el futuro digital</div>
+            <div class="text-h3 q-mb-md text-grey-5">Fullstack + Agentes IA + IoT</div>
+
+            <!-- CTA -->
+            <q-btn glossy color="primary" size="md" label="Explorar proyectos" class="q-mb-lg" />
+
+            <!-- Mini secciones -->
+            <div class="row justify-around q-mt-md section-preview">
+              <div class="col-4 text-center">
+                <q-icon name="code" size="60px" color="cyan" />
+                <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
+                <p class="text-grey-5">Apps web seguras y escalables.</p>
+              </div>
+              <div class="col-4 text-center">
+                <q-icon name="memory" size="60px" color="purple" />
+                <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
+                <p class="text-grey-5">Automatización y análisis inteligente.</p>
+              </div>
+              <div class="col-4 text-center">
+                <q-icon name="sensors" size="60px" color="amber" />
+                <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
+                <p class="text-grey-5">Domótica industrial y control en tiempo real.</p>
+              </div>
+            </div>
+
+            <div ref="planetContainer" class="planet-box"></div>
           </q-card-section>
         </q-card>
       </q-dialog>
@@ -80,7 +112,8 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, reactive } from 'vue'
+import { ref, onMounted, onUnmounted, reactive, nextTick } from 'vue'
+import { initPlanet } from '../assets/js/planet.js'
 const loading = ref(true)
 const drawers = reactive({
   top: false,
@@ -88,6 +121,24 @@ const drawers = reactive({
   bottom: false,
   left: false,
 })
+
+const planetContainer = ref(null)
+let destroyPlanet = null
+
+async function onDialogShow() {
+  await nextTick() // asegura que el DOM del dialog esté pintado
+  if (planetContainer.value && !destroyPlanet) {
+    destroyPlanet = initPlanet(planetContainer.value)
+  }
+}
+
+function onDialogHide() {
+  if (destroyPlanet) {
+    destroyPlanet()
+    destroyPlanet = null
+  }
+}
+
 const screenWidth = ref(window.innerWidth)
 const updateWidth = () => (screenWidth.value = window.innerWidth)
 
@@ -183,17 +234,36 @@ const particlesLoaded = async (container) => {
   console.log('Particles container loaded', container)
 }
 
-onMounted(() => {
-  // Espera al menos que el CSS, imágenes y partículas estén listas
+onMounted(async () => {
+  await nextTick()
+
+  // inicializar planeta
+  if (planetContainer.value && !destroyPlanet) {
+    destroyPlanet = initPlanet(planetContainer.value)
+  }
+
+  // listener de resize
+  window.addEventListener('resize', updateWidth)
+
+  // loading
   window.addEventListener('load', () => {
     setTimeout(() => {
       loading.value = false
-    }, 500) // da un margen para transiciones (ajusta si quieres)
+    }, 500)
   })
+})
+onUnmounted(() => {
+  destroyPlanet?.()
+  destroyPlanet = null
+  window.removeEventListener('resize', updateWidth)
 })
 </script>
 
 <style scoped>
+.planet-box {
+  width: 100%;
+  height: 380px; /* dale altura fija o no renderizará nada */
+}
 .hero-section {
   position: relative;
   height: 100vh;

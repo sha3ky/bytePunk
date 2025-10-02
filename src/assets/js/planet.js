@@ -83,15 +83,18 @@ export function initPlanet(containerEl) {
   }
 }
  */
-
 // planet.js
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js' // Necesitamos un cargador de fuentes
-import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js' // Y la geometría de texto
+import { FontLoader } from 'three/examples/jsm/loaders/FontLoader.js'
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 
 export function initPlanet(containerEl) {
   if (!containerEl) return () => {}
+
+  // Variables para la velocidad de rotación
+  let textRotationSpeed = 0.005
+  let textRotationSpeedX = 0.001
 
   // Renderer
   const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
@@ -107,10 +110,10 @@ export function initPlanet(containerEl) {
     0.1,
     1000,
   )
-  camera.position.z = 5 // Ajustamos la posición de la cámara para que quepa el texto
+  camera.position.z = 5
 
-  // Lights (Ajustadas para un efecto dorado)
-  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5) // Luz ambiental suave
+  // Luces
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
   scene.add(ambientLight)
 
   const directionalLight1 = new THREE.DirectionalLight(0xffffff, 0.8)
@@ -121,110 +124,99 @@ export function initPlanet(containerEl) {
   directionalLight2.position.set(-5, -5, -5)
   scene.add(directionalLight2)
 
-  // --- TEXTO 3D EN VEZ DEL PLANETA ---
+  // Controles
+  const controls = new OrbitControls(camera, renderer.domElement)
+  controls.enableDamping = true
+  controls.dampingFactor = 0.05
+  controls.enableZoom = false
+  controls.autoRotate = false
+
+  // Variable para el objeto de texto (se inicializará dentro del callback)
+  let bytePunkText = null
+
+  // --- CARGA Y CREACIÓN DEL TEXTO 3D ---
   const loader = new FontLoader()
 
-  // Carga una fuente JSON. Aquí estoy usando una fuente de Three.js.
-  // Es CRÍTICO que la ruta a la fuente sea correcta.
-  // Si esta fuente no se carga, el texto no aparecerá.
-  // Puedes descargar otras fuentes Three.js JSON o convertir tus propias TTF/OTF.
-  // Sugiero colocar la fuente en tu carpeta 'public' o 'assets' y referenciarla adecuadamente.
-  // Por ejemplo, si la pones en '/public/fonts/helvetiker_regular.typeface.json'
   loader.load('/fonts/helvetiker_regular.typeface.json', function (font) {
+    // Todo este código solo se ejecuta cuando la fuente está cargada.
     const textGeometry = new TextGeometry('bytePunk', {
       font: font,
-      size: 1, // Tamaño del texto
-      height: 0.2, // Profundidad del texto (extrusión)
-      curveSegments: 12, // Suavidad de las curvas
-      bevelEnabled: true, // Biselado (bordes redondeados)
-      bevelThickness: 0.03,
-      bevelSize: 0.02,
+      size: 0.5, // Reducir un poco el tamaño
+      height: 0.1, // Reducir la profundidad
+      curveSegments: 12,
+      bevelEnabled: true,
+      bevelThickness: 0.01, // Reducir el biselado
+      bevelSize: 0.01,
       bevelOffset: 0,
       bevelSegments: 5,
     })
 
-    // Centrar la geometría del texto después de su creación
+    // Centrar la geometría es clave para la rotación y el posicionamiento
     textGeometry.center()
 
     // Material dorado
     const goldMaterial = new THREE.MeshStandardMaterial({
-      color: 0xffd700, // Color oro (hexadecimal)
-      metalness: 0.9, // Muy metálico
-      roughness: 0.4, // Algo de brillo, no un espejo perfecto
+      color: 0xffd700,
+      metalness: 0.9,
+      roughness: 0.4,
     })
 
-    const bytePunkText = new THREE.Mesh(textGeometry, goldMaterial)
+    // Asignamos el objeto a la variable del ámbito superior
+    bytePunkText = new THREE.Mesh(textGeometry, goldMaterial)
     scene.add(bytePunkText)
+  }) // Fin del loader.load
 
-    // Ajustar el objeto para que rote (antes rotaban los controles, ahora rotará el texto)
-    // No necesitamos controls.autoRotate si queremos rotar el texto directamente.
-    // Esto es opcional, si quieres que el texto rote solo, sin mover la cámara automáticamente.
-    // Si prefieres que la cámara rote alrededor del texto, puedes dejar los controles.
-    // Para simplificar, haremos que el texto rote.
+  // Handlers
+  const onResize = () => {
+    const w = containerEl.offsetWidth
+    const h = containerEl.offsetHeight
+    renderer.setSize(w, h)
+    camera.aspect = w / h
+    camera.updateProjectionMatrix()
+  }
+  window.addEventListener('resize', onResize)
 
-    // Controles (para que puedas manipularlo si quieres, pero lo haremos auto-rotar)
-    const controls = new OrbitControls(camera, renderer.domElement)
-    controls.enableDamping = true
-    controls.dampingFactor = 0.05
-    controls.enableZoom = false
-    controls.autoRotate = false // Desactivamos la auto-rotación de los controles
-    // controls.autoRotateSpeed = 0.5 // Esta ya no afectará al texto
+  const onMouseDown = () => {
+    textRotationSpeed = 0.03
+    textRotationSpeedX = 0.005
+  }
+  const onMouseUp = () => {
+    textRotationSpeed = 0.005
+    textRotationSpeedX = 0.001
+  }
+  renderer.domElement.addEventListener('mousedown', onMouseDown)
+  renderer.domElement.addEventListener('mouseup', onMouseUp)
 
-    // Animación (ahora rotamos el texto)
-    let stopped = false
-    const animate = () => {
-      if (stopped) return
-      requestAnimationFrame(animate)
+  // Loop (Animación)
+  let stopped = false
+  const animate = () => {
+    if (stopped) return
+    requestAnimationFrame(animate)
 
-      // -----------------------------------------------------
-      // FIX: USE THE VARIABLES HERE!
-      // -----------------------------------------------------
+    // Solo rota el texto si ya se ha cargado y existe (es decir, no es null)
+    if (bytePunkText) {
       bytePunkText.rotation.y += textRotationSpeed
       bytePunkText.rotation.x += textRotationSpeedX
-
-      controls.update()
-      renderer.render(scene, camera)
     }
-    animate()
 
-    // Handlers (ahora los botones para acelerar pueden no tener tanto sentido si rotamos el texto)
-    // Los mantenemos pero se aplicarán a la cámara si usas autoRotate = true en controls
-    // Si quieres que aceleren el texto, necesitarías una variable para la velocidad del texto.
-    const onResize = () => {
-      const w = containerEl.offsetWidth
-      const h = containerEl.offsetHeight
-      renderer.setSize(w, h)
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-    }
-    window.addEventListener('resize', onResize)
+    controls.update()
+    renderer.render(scene, camera)
+  }
+  animate()
 
-    // Si quieres que el texto acelere:
-    let textRotationSpeed = 0.005
-    let textRotationSpeedX = 0.001
-
-    const onMouseDown = () => {
-      textRotationSpeed = 0.03
-      textRotationSpeedX = 0.005
+  // Cleanup (Nota: Debes asegurarte de que los materiales y geometrías sean accesibles aquí si los usas)
+  return function destroy() {
+    stopped = true
+    window.removeEventListener('resize', onResize)
+    renderer.domElement.removeEventListener('mousedown', onMouseDown)
+    renderer.domElement.removeEventListener('mouseup', onMouseUp)
+    controls.dispose()
+    // Los siguientes solo se deben llamar si el objeto de texto fue creado
+    if (bytePunkText) {
+      bytePunkText.geometry.dispose()
+      bytePunkText.material.dispose()
     }
-    const onMouseUp = () => {
-      textRotationSpeed = 0.005
-      textRotationSpeedX = 0.001
-    }
-    renderer.domElement.addEventListener('mousedown', onMouseDown)
-    renderer.domElement.addEventListener('mouseup', onMouseUp)
-
-    // Cleanup
-    return function destroy() {
-      stopped = true
-      window.removeEventListener('resize', onResize)
-      renderer.domElement.removeEventListener('mousedown', onMouseDown)
-      renderer.domElement.removeEventListener('mouseup', onMouseUp)
-      controls.dispose()
-      textGeometry.dispose()
-      goldMaterial.dispose()
-      renderer.dispose()
-      containerEl.innerHTML = ''
-    }
-  }) // Fin del loader.load
+    renderer.dispose()
+    containerEl.innerHTML = ''
+  }
 }

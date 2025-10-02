@@ -23,7 +23,7 @@
           <!-- Contenido central -->
           <div class="hero-content">
             <h1 class="hero-title glitch" data-text="BytePunk Studios">BytePunk Studios</h1>
-            <p class="hero-subtitle">Fullstack + IoT para un futuro industrial inteligente</p>
+            <p class="hero-subtitle">Fullstack + IoT + Agentes IA para un futuro inteligente</p>
 
             <!-- Radial Menu -->
             <div class="radial-menu">
@@ -58,22 +58,23 @@
           </div>
         </div>
       </q-page>
-      <q-drawer
+
+      <q-dialog
         v-model="drawers.right"
-        side="right"
-        :overlay="true"
-        behavior="mobile"
-        class="metal-drawer animated-drawer"
+        position="right"
+        maximized
+        transition-show="slide-left"
+        transition-hide="slide-right"
+        class="animated-drawer"
       >
-        <div class="drawer-content q-pa-md">
-          <q-card class="cyber-card">
-            <q-card-section>
-              <div class="text-h5">🚀 Proyectos</div>
-              <p>Aquí irán tus proyectos fullstack + IoT con un diseño brutal.</p>
-            </q-card-section>
-          </q-card>
-        </div>
-      </q-drawer>
+        <q-card class="cyber-card metal-drawer">
+          <div><q-btn flat label="Cerrar" color="primary" v-close-popup /></div>
+          <q-card-section>
+            <div class="text-h5">Panel de Proyectos (Alternativa)</div>
+            <p>Este es un q-dialog actuando como un q-drawer.</p>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
     </q-page-container>
   </q-layout>
 </template>

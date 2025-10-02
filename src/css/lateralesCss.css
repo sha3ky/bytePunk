@@ -1,35 +1,75 @@
 .metal-drawer {
-  background: url('/imagenes/metal-bg.jpg') center center / cover no-repeat;
-  backdrop-filter: blur(6px);
-  box-shadow: inset 0 0 60px rgba(0, 255, 255, 0.15);
-  color: #fff;
-  overflow: hidden;
+  width: 80vw !important; /* Forzamos el ancho */
+  max-width: 80vw;
+  /* ELIMINAMOS ESTA LÍNEA DE BACKGROUND: 
+     background: rgba(30, 30, 30, 0.1); 
+     YA QUE LA COMBINAREMOS ABAJO 
+  */
+  backdrop-filter: blur(8px) saturate(180%);
+  border-left: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.6);
+  transition: all 0.4s ease;
+  border-radius: 12px;
+
+  /* ------------------- CAMBIOS PARA LA IMAGEN SEMITRANSPARENTE ------------------- */
+
+  /* CLAVE: Usamos 'background' para definir múltiples capas de fondo */
+  /* Capa 1: Un color semitransparente (este es el "overlay" que oscurece/aclara la imagen) */
+  /* Puedes ajustar este RGBA. Cuanto más alto el último valor (alfa), más opaca la imagen. */
+  /* Si lo quieres más transparente, baja el último valor (ej: 0.5) */
+  background:
+    linear-gradient(rgba(30, 30, 30, 0.5), rgba(30, 30, 30, 0.5)),
+    /* Este RGBA es la opacidad */ url('/imagenes/background1.jpg') no-repeat center center; /* La imagen */
+
+  /* Puedes usar solo un color si prefieres, pero el degradado es más flexible */
+  /* background: rgba(30, 30, 30, 0.5), url('/imagenes/backgroundRight.webp') no-repeat center center; */
+
+  /* CLAVE 1: Aplica a la IMAGEN, no al color */
+  background-size: cover;
+
+  /* CLAVE 2 (Opcional pero recomendable): Fija la imagen al scroll si el contenido es largo */
+  background-attachment: fixed;
+
+  /* CLAVE 3 (IMPORTANTE): El color del GRADIENTE (rgba) sirve como color de fondo */
+  /* y garantiza que el 'backdrop-filter' funcione correctamente. */
 }
 
 /* animación al abrir el drawer desde la derecha */
 .animated-drawer {
-  animation: slideInRight 0.6s ease-out;
+  animation: slideInRight 0.4s ease-out;
+  border-radius: 15px;
 }
 
 @keyframes slideInRight {
-  0% {
+  from {
     transform: translateX(100%);
-    opacity: 0.3;
-    filter: blur(10px);
+    opacity: 0;
   }
-  100% {
-    transform: translateX(0);
+  to {
+    transform: translateX(0%);
     opacity: 1;
-    filter: blur(0);
   }
 }
 
 .cyber-card {
-  background: rgba(0, 0, 0, 0.75);
   border: 1px solid #0ff;
-  border-radius: 12px;
+
   box-shadow:
     0 0 15px #0ff5,
     0 0 30px #f0f;
-  backdrop-filter: blur(3px);
+  /*   backdrop-filter: blur(3px);
+ */
+}
+/* Este CSS debe estar en un archivo global o en un <style> no scoped. */
+
+/* Regla altamente específica para anular el ancho del drawer derecho en móvil */
+.q-drawer--right.q-drawer--mobile.ancho-75 {
+  /* Fuerza el ancho al 75% del viewport, anulando cualquier regla interna. */
+  width: 75vw !important;
+
+  /* Por seguridad, asegúrate de que el ancho máximo no lo limite. */
+  max-width: 75vw !important;
+
+  /* Anula cualquier posible variable CSS de Quasar si está configurando un ancho predeterminado. */
+  --q-drawer-width: 75vw !important;
 }

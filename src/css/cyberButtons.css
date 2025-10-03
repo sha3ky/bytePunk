@@ -147,3 +147,67 @@ body .cybr-btn + .cybr-btn {
     font-size: 0.9rem;
   }
 }
+/* botón Proyectos: look neon/cyber limpio */
+.btnProyectos {
+  margin-top: 1rem; /* si quieres consistencia usa 16px/1rem */
+}
+
+.btnProyectos.q-btn {
+  --bg1: #0ea5ff; /* cian */
+  --bg2: #7c3aed; /* púrpura */
+  --glow: rgba(14, 165, 255, 0.35);
+  --ring: #22d3ee; /* foco accesible */
+  border-radius: 12px;
+  padding: 0 18px;
+  text-transform: none;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+/* wrapper: fondo y glow */
+.btnProyectos.q-btn .q-btn__wrapper {
+  background: linear-gradient(90deg, var(--bg1), var(--bg2));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 8px 24px -10px var(--glow),
+    inset 0 0 12px rgba(255, 255, 255, 0.08);
+  transition:
+    transform 0.08s ease,
+    box-shadow 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* texto/icono */
+.btnProyectos.q-btn .q-btn__content {
+  color: #eaf6ff;
+}
+.btnProyectos.q-btn .q-icon {
+  color: currentColor;
+}
+
+/* estados */
+.btnProyectos.q-btn:hover .q-btn__wrapper {
+  transform: translateY(-1px);
+  box-shadow:
+    0 12px 28px -12px var(--glow),
+    inset 0 0 16px rgba(255, 255, 255, 0.1);
+}
+.btnProyectos.q-btn:active .q-btn__wrapper {
+  transform: translateY(0);
+  filter: brightness(0.95);
+}
+.btnProyectos.q-btn:focus-visible .q-btn__wrapper {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/* móvil: más compacto */
+@media (max-width: 599.98px) {
+  .btnProyectos.q-btn {
+    padding: 0 14px;
+    border-radius: 10px;
+  }
+  .btnProyectos {
+    margin-top: 12px;
+  } /* opcional, más preciso que 5% */
+}

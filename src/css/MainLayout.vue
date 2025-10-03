@@ -82,30 +82,35 @@
             <div class="text-h3 q-mb-md text-grey-5">Fullstack + Agentes IA + IoT</div>
 
             <!-- CTA -->
-            <q-btn glossy color="primary" size="md" label="Explorar proyectos" class="q-mb-lg" />
+            <q-btn glossy class="btnProyectos" size="md" label="Explorar proyectos" />
 
             <!-- Mini secciones -->
             <div class="row justify-around q-mt-md section-preview">
-              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
+              <div class="col-xs-12 col-sm-4 text-center q-mb-md fs-col">
                 <q-icon name="code" size="60px" color="cyan" />
                 <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
                 <p class="text-grey-5">Apps web seguras y escalables.</p>
               </div>
 
-              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
-                <q-icon name="memory" size="60px" color="purple" />
-                <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
-                <p class="text-grey-5">Automatización y análisis inteligente.</p>
+              <div
+                v-if="!$q.screen.lt.sm"
+                class="col-xs-12 col-sm-4 text-center q-mb-md planet-col"
+              >
+                <div ref="planetContainer" class="planet-box"></div>
               </div>
 
-              <div class="col-xs-12 col-sm-4 text-center q-mb-md">
+              <div class="col-xs-12 col-sm-4 text-center q-mb-md iot-col">
                 <q-icon name="sensors" size="60px" color="amber" />
                 <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
                 <p class="text-grey-5">Domótica industrial y control en tiempo real.</p>
               </div>
             </div>
 
-            <div ref="planetContainer" class="planet-box"></div>
+            <div>
+              <q-icon name="memory" size="60px" color="purple" />
+              <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
+              <p class="text-grey-5">Automatización y análisis inteligente.</p>
+            </div>
           </q-card-section>
         </q-card>
       </q-dialog>
@@ -116,6 +121,7 @@
 <script setup>
 import { ref, onMounted, onUnmounted, reactive, nextTick } from 'vue'
 import { initPlanet } from '../assets/js/planet.js'
+import { useQuasar } from 'quasar'
 const loading = ref(true)
 const drawers = reactive({
   top: false,
@@ -123,11 +129,12 @@ const drawers = reactive({
   bottom: false,
   left: false,
 })
-
+const $q = useQuasar()
 const planetContainer = ref(null)
 let destroyPlanet = null
 
 async function onDialogShow() {
+  if ($q.screen.lt.sm) return
   await nextTick() // asegura que el DOM del dialog esté pintado
   if (planetContainer.value && !destroyPlanet) {
     destroyPlanet = initPlanet(planetContainer.value)

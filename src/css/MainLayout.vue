@@ -89,7 +89,11 @@
               <div class="col-xs-12 col-sm-4 text-center q-mb-md fs-col">
                 <q-icon name="code" size="60px" color="cyan" />
                 <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
-                <p class="text-grey-5">Apps web seguras y escalables.</p>
+                <p class="text-grey-5">
+                  Apps web seguras y escalables que impulsan tu negocio. Entrega ágil sin sacrificar
+                  calidad en el código. Garantizamos integraciones fluidas con sistemas legacy y
+                  APIs, asegurando la seguridad desde el día cero.
+                </p>
               </div>
 
               <div
@@ -102,14 +106,23 @@
               <div class="col-xs-12 col-sm-4 text-center q-mb-md iot-col">
                 <q-icon name="sensors" size="60px" color="amber" />
                 <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
-                <p class="text-grey-5">Domótica industrial y control en tiempo real.</p>
+                <p class="text-grey-5">
+                  Prototipos funcionales y telemetría fiable con ESP32/Arduino. Construimos
+                  soluciones IoT a medida para validar ideas de control físico y domótica.
+                  Aseguramos la conexión de sensores y la adquisición de datos en tiempo real,
+                  sentando las bases de sistemas inteligentes y escalables.
+                </p>
               </div>
             </div>
 
-            <div>
+            <div class="text-center">
               <q-icon name="memory" size="60px" color="purple" />
               <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
-              <p class="text-grey-5">Automatización y análisis inteligente.</p>
+              <p class="text-grey-5 q-mx-auto" style="width: 50%">
+                Nos enfocamos en el potencial de la automatización y el análisis inteligente. Esta
+                área está en fase de prueba y aprendizaje, sentando las bases teóricas. Pronto
+                incorporaremos Agentes IA para impulsar la eficiencia y la toma de decisiones.
+              </p>
             </div>
           </q-card-section>
         </q-card>

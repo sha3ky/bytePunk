@@ -240,21 +240,27 @@ export function initPlanet(containerEl) {
 
   // Controles
   const controls = new OrbitControls(camera, renderer.domElement)
-  controls.enableDamping = true
-  controls.dampingFactor = 0.05
-  controls.enableZoom = false
   controls.autoRotate = true
-  controls.autoRotateSpeed = 1.2
+  controls.autoRotateSpeed = 1.5
+
+  controls.enableDamping = false
+  controls.enableZoom = false
+  controls.enableRotate = false // 👈 bloquea rotación manual
+  controls.enablePan = false // 👈 bloquea pan
+
+  // extra: anula botones y gestos táctiles
+  controls.mouseButtons = { LEFT: null, MIDDLE: null, RIGHT: null }
+  controls.touches = { ONE: null, TWO: null }
 
   // Resize
-  const onResize = () => {
+  /*   const onResize = () => {
     const w = containerEl.offsetWidth
     const h = containerEl.offsetHeight
     renderer.setSize(w, h)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
   }
-  window.addEventListener('resize', onResize)
+  window.addEventListener('resize', onResize) */
 
   // Animación
   let stopped = false
@@ -274,8 +280,8 @@ export function initPlanet(containerEl) {
   // ✅ Cleanup completo
   return function destroy() {
     stopped = true
-    window.removeEventListener('resize', onResize)
-    controls.dispose()
+    /*     window.removeEventListener('resize', onResize)
+     */ controls.dispose()
 
     geometry.dispose()
     material.dispose()

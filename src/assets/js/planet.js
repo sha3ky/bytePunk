@@ -271,10 +271,18 @@ export function initPlanet(containerEl) {
   }
   animate()
 
-  return () => {
+  // ✅ Cleanup completo
+  return function destroy() {
     stopped = true
     window.removeEventListener('resize', onResize)
     controls.dispose()
+
+    geometry.dispose()
+    material.dispose()
+    wireMaterial.dispose()
+    glowGeo.dispose()
+    glowMat.dispose()
+
     renderer.dispose()
     containerEl.innerHTML = ''
   }

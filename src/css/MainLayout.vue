@@ -262,10 +262,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.planet-box {
-  width: 100%;
-  height: 380px; /* dale altura fija o no renderizará nada */
-}
 .hero-section {
   position: relative;
   height: 100vh;

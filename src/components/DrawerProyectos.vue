@@ -16,7 +16,7 @@
     <q-card class="cyber-card metal-drawer">
       <!-- Botón de cerrar -->
       <div class="close-btn-container">
-        <q-btn flat label="Cerrar" color="primary" @click="close" />
+        <q-btn flat round dense icon="close" color="primary" @click="close" />
       </div>
 
       <!-- CONTENIDO PRINCIPAL DEL DRAWER -->

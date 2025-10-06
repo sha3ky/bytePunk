@@ -59,82 +59,15 @@
         </div>
       </q-page>
 
-      <q-dialog
-        v-model="drawers.right"
-        position="right"
-        maximized
-        transition-show="slide-left"
-        transition-hide="slide-right"
-        class="animated-drawer"
-        @show="onDialogShow"
-        @hide="onDialogHide"
-      >
-        <q-card class="cyber-card metal-drawer">
-          <!-- Botón de cerrar -->
-          <div>
-            <q-btn flat label="Cerrar" color="primary" v-close-popup />
-          </div>
-
-          <!-- Contenido del drawer -->
-          <q-card-section class="text-center">
-            <!-- Hero -->
-            <div class="text-h2 q-mb-sm neon-text text-grey-5">Construyendo el futuro digital</div>
-            <div class="text-h3 q-mb-md text-grey-5">Fullstack + Agentes IA + IoT</div>
-
-            <!-- CTA -->
-            <q-btn glossy class="btnProyectos" size="md" label="Explorar proyectos" />
-
-            <!-- Mini secciones -->
-            <div class="row justify-around q-mt-md section-preview">
-              <div class="col-xs-12 col-sm-4 text-center q-mb-md fs-col">
-                <q-icon name="code" size="60px" color="cyan" />
-                <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
-                <p class="text-grey-5">
-                  Apps web seguras y escalables que impulsan tu negocio. Entrega ágil sin sacrificar
-                  calidad en el código. Garantizamos integraciones fluidas con sistemas legacy y
-                  APIs, asegurando la seguridad desde el día cero.
-                </p>
-              </div>
-
-              <div
-                v-if="!$q.screen.lt.sm"
-                class="col-xs-12 col-sm-4 text-center q-mb-md planet-col"
-              >
-                <div ref="planetContainer" class="planet-box"></div>
-              </div>
-
-              <div class="col-xs-12 col-sm-4 text-center q-mb-md iot-col">
-                <q-icon name="sensors" size="60px" color="amber" />
-                <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
-                <p class="text-grey-5">
-                  Prototipos funcionales y telemetría fiable con ESP32/Arduino. Construimos
-                  soluciones IoT a medida para validar ideas de control físico y domótica.
-                  Aseguramos la conexión de sensores y la adquisición de datos en tiempo real,
-                  sentando las bases de sistemas inteligentes y escalables.
-                </p>
-              </div>
-            </div>
-
-            <div class="text-center">
-              <q-icon name="memory" size="60px" color="purple" />
-              <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
-              <p class="text-grey-5 q-mx-auto" style="width: 50%">
-                Nos enfocamos en el potencial de la automatización y el análisis inteligente. Esta
-                área está en fase de prueba y aprendizaje, sentando las bases teóricas. Pronto
-                incorporaremos Agentes IA para impulsar la eficiencia y la toma de decisiones.
-              </p>
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-dialog>
+      <DrawerInicio :visible="drawers.right" @close="drawers.right = false" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted, reactive, nextTick } from 'vue'
-import { initPlanet } from '../assets/js/planet.js'
-import { useQuasar } from 'quasar'
+import { ref, reactive, onMounted } from 'vue'
+
+import DrawerInicio from '../components/DrawerInicio.vue'
 const loading = ref(true)
 const drawers = reactive({
   top: false,
@@ -142,30 +75,9 @@ const drawers = reactive({
   bottom: false,
   left: false,
 })
-const $q = useQuasar()
-const planetContainer = ref(null)
-let destroyPlanet = null
-
-async function onDialogShow() {
-  if ($q.screen.lt.sm) return
-  await nextTick() // asegura que el DOM del dialog esté pintado
-  if (planetContainer.value && !destroyPlanet) {
-    destroyPlanet = initPlanet(planetContainer.value)
-  }
-}
-
-function onDialogHide() {
-  if (destroyPlanet) {
-    destroyPlanet()
-    destroyPlanet = null
-  }
-}
 
 const screenWidth = ref(window.innerWidth)
-const updateWidth = () => (screenWidth.value = window.innerWidth)
-
-onMounted(() => window.addEventListener('resize', updateWidth))
-onUnmounted(() => window.removeEventListener('resize', updateWidth))
+/* const updateWidth = () => (screenWidth.value = window.innerWidth) */
 
 const open = ref(false)
 const items = [
@@ -220,7 +132,17 @@ const onItemClick = (item) => {
     }
   }, 400) // espera la animación del menú radial
 }
-
+onMounted(async () => {
+  // listener de resize
+  /*   window.addEventListener('resize', updateWidth)
+   */
+  // loading
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      loading.value = false
+    }, 500)
+  })
+})
 /* -------- Particles -------- */
 const particlesOptions = {
   background: { color: { value: 'transparent' } },
@@ -255,30 +177,6 @@ const particlesOptions = {
 const particlesLoaded = async (container) => {
   console.log('Particles container loaded', container)
 }
-
-onMounted(async () => {
-  await nextTick()
-
-  // inicializar planeta
-  if (planetContainer.value && !destroyPlanet) {
-    destroyPlanet = initPlanet(planetContainer.value)
-  }
-
-  // listener de resize
-  window.addEventListener('resize', updateWidth)
-
-  // loading
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
-  })
-})
-onUnmounted(() => {
-  destroyPlanet?.()
-  destroyPlanet = null
-  window.removeEventListener('resize', updateWidth)
-})
 </script>
 
 <style scoped>

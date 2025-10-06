@@ -35,8 +35,8 @@
 }
 
 /* animación al abrir el drawer desde la derecha */
-.animated-drawer {
-  animation: slideInRight 0.4s ease-out;
+.animated-drawerRight {
+  animation: slideInRight 0.6s ease-out;
   border-radius: 15px;
 }
 
@@ -50,7 +50,20 @@
     opacity: 1;
   }
 }
-
+@keyframes slideInBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+.animated-drawerBottom {
+  animation: slideInBottom 0.6s ease-out;
+  border-radius: 15px;
+}
 .cyber-card {
   border: 1px solid #0ff;
 

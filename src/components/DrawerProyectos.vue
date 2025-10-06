@@ -5,17 +5,17 @@
   <!-- Cuando se oculta -->
   <q-dialog
     v-model="localVisible"
-    position="right"
+    position="bottom"
     maximized
-    transition-show="slide-left"
-    transition-hide="slide-right"
-    class="animated-drawerRight"
+    transition-show="slide-up"
+    transition-hide="slide-down"
+    class="animated-drawerBottom"
     @show="onDialogShow"
     @hide="onDialogHide"
   >
     <q-card class="cyber-card metal-drawer">
       <!-- Botón de cerrar -->
-      <div>
+      <div class="close-btn-container">
         <q-btn flat label="Cerrar" color="primary" @click="close" />
       </div>
 
@@ -180,3 +180,15 @@ onUnmounted(() => {
 */
 defineExpose({ close })
 </script>
+<style scoped>
+.close-btn-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 10, 20, 0.7); /* fondo semitransparente para legibilidad */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem;
+}
+</style>

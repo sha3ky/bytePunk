@@ -55,6 +55,7 @@
       </q-page>
 
       <DrawerInicio v-model="drawers.right" />
+      <DrawerProyectos v-model="drawers.bottom" />
     </q-page-container>
   </q-layout>
 </template>
@@ -63,6 +64,8 @@
 import { ref, reactive, onMounted } from 'vue'
 
 import DrawerInicio from '../components/DrawerInicio.vue'
+import DrawerProyectos from 'src/components/DrawerProyectos.vue'
+
 const loading = ref(true)
 const drawers = reactive({
   top: false,

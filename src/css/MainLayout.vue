@@ -34,15 +34,10 @@
               </button>
 
               <!-- Items -->
-              <transition-group
-                name="radial"
-                tag="div"
-                class="radial-items"
-                v-if="open"
-                appear
-                mode="out-in"
-              >
+              <transition-group name="radial" tag="div" class="radial-items" appear mode="out-in">
+                <!--  -->
                 <div
+                  v-show="open"
                   v-for="(item, i) in items"
                   :key="item.label"
                   class="radial-wrapper"
@@ -59,7 +54,7 @@
         </div>
       </q-page>
 
-      <DrawerInicio :visible="drawers.right" @close="drawers.right = false" />
+      <DrawerInicio v-model="drawers.right" />
     </q-page-container>
   </q-layout>
 </template>

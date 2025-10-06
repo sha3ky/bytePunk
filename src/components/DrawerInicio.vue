@@ -110,6 +110,7 @@ const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
   - Necesario porque Quasar maneja su propio v-model internamente.
   - localVisible mantiene sincronía entre el padre y el QDialog.
 */
+
 const localVisible = ref(props.modelValue)
 
 /*
@@ -118,9 +119,10 @@ const localVisible = ref(props.modelValue)
   - Cuando el hijo cambia (por animaciones o cierre interno),
     se emite el nuevo valor hacia el padre.
 */
+
 watch(
   () => props.modelValue,
-  (val) => (localVisible.value = val),
+  (val) => (console.log('propsEmit', props.modelValue), (localVisible.value = val)),
 )
 watch(localVisible, (val) => emit('update:modelValue', val))
 

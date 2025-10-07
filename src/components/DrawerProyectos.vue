@@ -22,35 +22,40 @@
       <!-- CONTENIDO PRINCIPAL DEL DRAWER -->
       <q-card-section class="text-center">
         <!-- PLANETA -->
-        <div v-if="!$q.screen.lt.sm" class="col-xs-12 col-sm-4 text-center q-mb-md planet-col">
-          <div ref="planetContainer" class="planet-box"></div>
-        </div>
-        <div class="q-pa-md">
+        <div class="row">
           <div
-            class="q-gutter-y-sm"
-            style="
-              overflow-x: visible;
-              overflow-y: auto;
-              width: 300px;
-              max-width: 20vw;
-              max-height: 80vh;
-            "
+            v-if="!$q.screen.lt.sm"
+            class="col-xs-12 col-sm-4 planet-col no-padding q-mb-md flex justify-start items-center"
           >
-            <q-img
-              v-for="(src, index) in images"
-              :key="index"
-              :ref="
-                (el) => {
-                  thumbRef[index] = el
-                }
+            <div ref="planetContainer" class="planet-box"></div>
+          </div>
+          <div class="q-pa-md">
+            <div
+              class="q-gutter-y-sm"
+              style="
+                overflow-x: visible;
+                overflow-y: auto;
+                width: 300px;
+                max-width: 20vw;
+                max-height: 80vh;
               "
-              class="cursor-pointer"
-              :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
-              style="border-radius: 3%/5%"
-              :style="index === indexZoomed ? 'width: 800px; max-width: 70vw;' : void 0"
-              :src="src"
-              @click="zoomImage(index)"
-            />
+            >
+              <q-img
+                v-for="(src, index) in images"
+                :key="index"
+                :ref="
+                  (el) => {
+                    thumbRef[index] = el
+                  }
+                "
+                class="cursor-pointer"
+                :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
+                style="border-radius: 3%/5%"
+                :style="index === indexZoomed ? 'width: 800px; max-width: 70vw;' : void 0"
+                :src="src"
+                @click="zoomImage(index)"
+              />
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -84,11 +89,49 @@ const props = defineProps({
   - shown, hidden → eventos personalizados por si el padre quiere escuchar
 */
 const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
-const thumbRef = ref([])
+
 const localVisible = ref(props.modelValue)
 const $q = useQuasar()
 const planetContainer = ref(null)
 let destroyPlanet = null
+/* zoom imagenes */
+const thumbRef = ref([])
+const indexZoomed = ref(void 0)
+const images = ref(
+  Array(24)
+    .fill(null)
+    .map((_, i) => 'https://picsum.photos/id/' + i + '/500/300'),
+)
+
+function zoomImage(index) {
+  const indexZoomedState = indexZoomed.value
+  let cancel = void 0
+
+  indexZoomed.value = void 0
+
+  if (index !== void 0 && index !== indexZoomedState) {
+    cancel = morph({
+      from: thumbRef.value[index].$el,
+      onToggle: () => {
+        indexZoomed.value = index
+      },
+      duration: 500,
+      onEnd: (end) => {
+        if (end === 'from' && indexZoomed.value === index) {
+          indexZoomed.value = void 0
+        }
+      },
+    })
+  }
+
+  if (indexZoomedState !== void 0 && (cancel === void 0 || cancel() === false)) {
+    morph({
+      from: thumbRef.value[indexZoomedState].$el,
+      waitFor: 100,
+      duration: 300,
+    })
+  }
+}
 
 async function onDialogShow() {
   emit('shown') // opcional, por si el padre quiere reaccionar
@@ -107,10 +150,9 @@ function onDialogHide() {
   }
 }
 
-/*
-  🚪 Función de cierre manual
-  - Permite cerrar el drawer desde dentro o desde el padre si se expone.
-*/
+/*🚪 Función de cierre manual
+  - Permite cerrar el drawer desde dentro o desde el padre si se expone.*/
+
 function close() {
   localVisible.value = false
 }
@@ -134,6 +176,9 @@ onMounted(async () => {
 onUnmounted(() => {
   destroyPlanet?.()
   destroyPlanet = null
+})
+onBeforeUpdate(() => {
+  thumbRef.value = []
 })
 
 /*

@@ -1,0 +1,30 @@
+/* animación al abrir el drawer desde la derecha */
+.animated-drawerRight {
+  animation: slideInRight 0.6s ease-out;
+  border-radius: 15px;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+}
+/* Este CSS debe estar en un archivo global o en un <style> no scoped. */
+/* Regla altamente específica para anular el ancho del drawer derecho en móvil */
+.q-drawer--right.q-drawer--mobile.ancho-75 {
+  /* Fuerza el ancho al 75% del viewport, anulando cualquier regla interna. */
+  width: 75vw !important;
+
+  /* Por seguridad, asegúrate de que el ancho máximo no lo limite. */
+  max-width: 75vw !important;
+
+  /* Anula cualquier posible variable CSS de Quasar si está configurando un ancho predeterminado. */
+  --q-drawer-width: 75vw !important;
+}
+
+/* imprescindible: altura del canvas */

@@ -6,5 +6,7 @@
 
 <style src="./css/butonMenuStyle.css"></style>
 <style src="./css/menuRadial.css"></style>
-<style src="./css/drawerPanels.css"></style>
+<style src="./css/panelRight.css"></style>
+<style src="./css/panelBottom.css"></style>
 <style src="./css/loadingPage.css"></style>
+<style src="./css/baseStyle.css"></style>

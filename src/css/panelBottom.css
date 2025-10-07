@@ -1,0 +1,14 @@
+@keyframes slideInBottom {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
+.animated-drawerBottom {
+  animation: slideInBottom 0.6s ease-out;
+  border-radius: 15px;
+}

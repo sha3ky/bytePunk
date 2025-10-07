@@ -70,9 +70,6 @@
           </p>
         </div>
       </q-card-section>
-
-      <!-- Botón Cerrar (backup visual) -->
-      <q-btn label="Cerrar" @click="close" />
     </q-card>
   </q-dialog>
 </template>

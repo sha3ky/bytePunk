@@ -1,3 +1,22 @@
+.cyber-card {
+  border: 1px solid #0ff;
+
+  box-shadow:
+    0 0 15px #0ff5,
+    0 0 30px #f0f;
+  /*   backdrop-filter: blur(3px);
+ */
+}
+.planet-box {
+  width: 100%;
+  height: 380px;
+}
+.neon-text {
+  font-size: 2.8rem; /* más grande */
+  text-shadow:
+    0 0 12px #00ffff,
+    0 0 24px #00ffff;
+}
 .metal-drawer {
   width: 80vw !important; /* Forzamos el ancho */
   max-width: 80vw;
@@ -32,68 +51,4 @@
 
   /* CLAVE 3 (IMPORTANTE): El color del GRADIENTE (rgba) sirve como color de fondo */
   /* y garantiza que el 'backdrop-filter' funcione correctamente. */
-}
-
-/* animación al abrir el drawer desde la derecha */
-.animated-drawerRight {
-  animation: slideInRight 0.6s ease-out;
-  border-radius: 15px;
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0%);
-    opacity: 1;
-  }
-}
-@keyframes slideInBottom {
-  from {
-    transform: translateY(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateY(0%);
-    opacity: 1;
-  }
-}
-.animated-drawerBottom {
-  animation: slideInBottom 0.6s ease-out;
-  border-radius: 15px;
-}
-.cyber-card {
-  border: 1px solid #0ff;
-
-  box-shadow:
-    0 0 15px #0ff5,
-    0 0 30px #f0f;
-  /*   backdrop-filter: blur(3px);
- */
-}
-/* Este CSS debe estar en un archivo global o en un <style> no scoped. */
-
-/* Regla altamente específica para anular el ancho del drawer derecho en móvil */
-.q-drawer--right.q-drawer--mobile.ancho-75 {
-  /* Fuerza el ancho al 75% del viewport, anulando cualquier regla interna. */
-  width: 75vw !important;
-
-  /* Por seguridad, asegúrate de que el ancho máximo no lo limite. */
-  max-width: 75vw !important;
-
-  /* Anula cualquier posible variable CSS de Quasar si está configurando un ancho predeterminado. */
-  --q-drawer-width: 75vw !important;
-}
-.neon-text {
-  font-size: 2.8rem; /* más grande */
-  text-shadow:
-    0 0 12px #00ffff,
-    0 0 24px #00ffff;
-}
-/* imprescindible: altura del canvas */
-.planet-box {
-  width: 100%;
-  height: 380px;
 }

@@ -52,7 +52,7 @@
   /* CLAVE 3 (IMPORTANTE): El color del GRADIENTE (rgba) sirve como color de fondo */
   /* y garantiza que el 'backdrop-filter' funcione correctamente. */
 }
-.no-padding {
+/* .no-padding {
   padding-left: 0;
   padding-right: 0;
-}
+} */

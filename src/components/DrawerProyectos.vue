@@ -19,17 +19,10 @@
         <q-btn flat round dense icon="close" color="primary" @click="close" />
       </div>
 
-      <!-- CONTENIDO PRINCIPAL DEL DRAWER -->
       <q-card-section class="text-center">
-        <!-- PLANETA -->
-        <div class="row">
-          <div
-            v-if="!$q.screen.lt.sm"
-            class="col-xs-12 col-sm-4 planet-col no-padding q-mb-md flex justify-start items-center"
-          >
-            <div ref="planetContainer" class="planet-box"></div>
-          </div>
-          <div class="q-pa-md">
+        <div class="row justify-start">
+          <!-- Columna izquierda: miniaturas -->
+          <div class="col-auto q-pa-md">
             <div
               class="q-gutter-y-sm"
               style="
@@ -51,10 +44,27 @@
                 class="cursor-pointer"
                 :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
                 style="border-radius: 3%/5%"
-                :style="index === indexZoomed ? 'width: 800px; max-width: 70vw;' : void 0"
+                :style="
+                  index === indexZoomed
+                    ? 'width: 800px; max-width: clamp(300px, 48vw, 800px); margin-top: 8vh; margin-right: clamp(5vw, 7vw - 2vw, 13vw);'
+                    : void 0
+                "
                 :src="src"
                 @click="zoomImage(index)"
               />
+            </div>
+          </div>
+
+          <!-- Columna derecha: contenido “aaa” -->
+          <div class="col grow q-pa-md content-col">
+            <div class="content-placeholder">
+              <p>
+                Lorem ipsum is a dummy or placeholder text commonly used in graphic design,
+                publishing, and web development. Its purpose is to permit a page layout to be
+                designed, independently of the copy that will subsequently populate it, or to
+                demonstrate various fonts of a typeface without meaningful text that could be
+                distracting. Lorem ipsum is typically a corrupted
+              </p>
             </div>
           </div>
         </div>

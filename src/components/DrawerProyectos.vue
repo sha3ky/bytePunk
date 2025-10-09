@@ -46,11 +46,12 @@
                 style="border-radius: 3%/5%"
                 :style="
                   index === indexZoomed
-                    ? 'width: 800px; max-width: clamp(300px, 48vw, 800px); margin-top: 8vh; margin-right: clamp(5vw, 7vw - 2vw, 13vw);'
+                    ? 'width: 800px; max-width: clamp(230px, 45vw, 500px); margin-top: 10vh; margin-right: clamp(5vw, 7vw - 2vw, 13vw);'
                     : void 0
                 "
                 :src="src"
                 @click="zoomImage(index)"
+                loading="lazy"
               />
             </div>
           </div>
@@ -62,8 +63,6 @@
                 Lorem ipsum is a dummy or placeholder text commonly used in graphic design,
                 publishing, and web development. Its purpose is to permit a page layout to be
                 designed, independently of the copy that will subsequently populate it, or to
-                demonstrate various fonts of a typeface without meaningful text that could be
-                distracting. Lorem ipsum is typically a corrupted
               </p>
             </div>
           </div>
@@ -107,12 +106,21 @@ let destroyPlanet = null
 /* zoom imagenes */
 const thumbRef = ref([])
 const indexZoomed = ref(void 0)
+const arrayimages = [
+  'dnsDynamic',
+  'dustrbike',
+  'jtcars',
+  'lottery',
+  'plantsIA',
+  'shiftclock',
+  'Aiteacher',
+]
 const images = ref(
-  Array(24)
+  Array(7)
     .fill(null)
-    .map((_, i) => 'https://picsum.photos/id/' + i + '/500/300'),
+    .map((_, i) => '/public/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
 )
-
+console.log(images)
 function zoomImage(index) {
   const indexZoomedState = indexZoomed.value
   let cancel = void 0

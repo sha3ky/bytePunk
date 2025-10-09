@@ -37,7 +37,7 @@
 
 .content-placeholder {
   /* El texto crece entre 16 y 22 px según el ancho */
-  font-size: clamp(1rem, 1vw + 0.8rem, 1.4rem);
+  font-size: clamp(1.1rem, 1vw + 0.8rem, 1.4rem);
 
   /* El margen superior baja dinámicamente con pantallas pequeñas */
   margin-top: clamp(1vh, 3vh - 1vw, 4vh);

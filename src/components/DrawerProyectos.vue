@@ -34,39 +34,49 @@
                 max-height: 80vh;
               "
             >
-              <q-img
-                v-for="(src, index) in images"
-                :key="index"
-                :ref="
-                  (el) => {
-                    thumbRef[index] = el
-                  }
-                "
-                class="cursor-pointer"
-                :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
-                style="border-radius: 3%/5%"
-                :style="
-                  index === indexZoomed
-                    ? `
-        position: fixed;
-        top: ${screenWidth < 400 ? '28vh' : '33vh'};
-        left: 64%;
-        transform: translate(-50%, -50%);
-        width: clamp(250px, 48vw, 600px);
-        max-height: 78vh;
-        z-index: 2000;
-        border-radius: 12px;
-        transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
+              <div v-for="(src, index) in images" :key="index" class="relative-position">
+                <!-- Miniatura -->
+                <q-img
+                  v-show="!showVideo || index !== indexZoomed"
+                  :ref="(el) => (thumbRef[index] = el)"
+                  class="cursor-pointer"
+                  :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
+                  style="border-radius: 3%/5%"
+                  :style="
+                    index === indexZoomed
+                      ? `
+          position: fixed;
+          top: ${screenWidth < 400 ? '28vh' : '33vh'};
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: clamp(250px, 48vw, 600px);
+          max-height: 78vh;
+          z-index: 2000;
+          border-radius: 12px;
+          transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
+        `
+                      : void 0
+                  "
+                  :src="src"
+                  @click="zoomImage(index)"
+                  loading="lazy"
+                />
 
-      `
-                    : void 0
-                "
-                :src="src"
-                @click="zoomImage(index)"
-                loading="lazy"
-              />
+                <!-- 🎥 Video embebido SOLO dentro de la imagen ampliada -->
+                <!-- 🎥 Video embebido SOLO dentro de la imagen ampliada -->
+                <transition name="fade">
+                  <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
+                    <iframe
+                      src="https://www.youtube.com/embed/AKFEbd8mjNE?autoplay=1&mute=1&rel=0&modestbranding=1"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                    ></iframe>
+                  </div>
+                </transition>
+              </div>
             </div>
           </div>
+
           <!--  <div v-if="!$q.screen.lt.sm" class="col-xs-12 col-sm-4 text-center q-mb-md planet-col">
             <div ref="planetContainer" class="planet-box"></div>
           </div> -->
@@ -134,7 +144,12 @@ const images = ref(
     .fill(null)
     .map((_, i) => '/public/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
 )
-console.log(images)
+
+const showVideo = ref(false) // controla la visibilidad del iframe
+/* function zoomImage(index) {
+  indexZoomed.value = index
+  showVideo.value = true
+} */
 function zoomImage(index) {
   const indexZoomedState = indexZoomed.value
   let cancel = void 0
@@ -146,11 +161,13 @@ function zoomImage(index) {
       from: thumbRef.value[index].$el,
       onToggle: () => {
         indexZoomed.value = index
+        showVideo.value = true // <- 🔥 aseguramos que se active
       },
       duration: 500,
       onEnd: (end) => {
         if (end === 'from' && indexZoomed.value === index) {
           indexZoomed.value = void 0
+          showVideo.value = false
         }
       },
     })
@@ -162,6 +179,7 @@ function zoomImage(index) {
       waitFor: 100,
       duration: 300,
     })
+    showVideo.value = false
   }
 }
 

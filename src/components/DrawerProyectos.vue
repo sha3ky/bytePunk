@@ -10,8 +10,6 @@
     transition-show="slide-up"
     transition-hide="slide-down"
     class="animated-drawerBottom"
-    @show="onDialogShow"
-    @hide="onDialogHide"
   >
     <q-card class="cyber-card metal-drawer">
       <!-- Botón de cerrar -->
@@ -67,10 +65,12 @@
                 <transition name="fade">
                   <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
                     <iframe
-                      src="https://www.youtube.com/embed/AKFEbd8mjNE?autoplay=1&mute=1&rel=0&modestbranding=1"
+                      :key="linkVideo"
+                      :src="linkVideo"
                       allow="autoplay; encrypted-media"
                       allowfullscreen
                     ></iframe>
+                    <!--  "allow" ="autoplay; encrypted-media"  -->
                   </div>
                 </transition>
               </div>
@@ -104,9 +104,8 @@
   - useQuasar → acceso a info de pantalla (breakpoints)
   - initPlanet → tu efecto 3D personalizado
 */
-import { ref, watch, nextTick, onMounted, onUnmounted, onBeforeUpdate } from 'vue'
-import { useQuasar, morph } from 'quasar'
-import { initPlanet } from '../assets/js/planet.js'
+import { ref, watch, onMounted, onUnmounted, onBeforeUpdate, nextTick } from 'vue'
+import { morph } from 'quasar'
 const screenWidth = ref(0)
 /*
   🧩 Props
@@ -122,11 +121,8 @@ const props = defineProps({
   - shown, hidden → eventos personalizados por si el padre quiere escuchar
 */
 const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
-
 const localVisible = ref(props.modelValue)
-const $q = useQuasar()
-const planetContainer = ref(null)
-let destroyPlanet = null
+
 /* zoom imagenes */
 const thumbRef = ref([])
 const indexZoomed = ref(void 0)
@@ -145,58 +141,62 @@ const images = ref(
     .map((_, i) => '/public/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
 )
 
-const showVideo = ref(false) // controla la visibilidad del iframe
-/* function zoomImage(index) {
-  indexZoomed.value = index
-  showVideo.value = true
-} */
-function zoomImage(index) {
-  const indexZoomedState = indexZoomed.value
-  let cancel = void 0
+const videosDeProyecto = {
+  // Clave (Key)     : Valor (Value)
+  dnsDynamic: 'https://www.youtube.com/embed/AKFEbd8mjNE?autoplay=1&mute=1&rel=0&modestbranding=1',
+  dustrbike: 'https://www.youtube.com/embed/-WEWVsC8CyA?si=3cmgnepeZ4t0Renf',
+}
+const showVideo = ref(false)
+const linkVideo = ref('')
 
+function getVideoUrlByIndex(index) {
+  const key = arrayimages[index] // p.ej. 'dnsDynamic'
+  return videosDeProyecto[key] || '' // fallback vacío si no hay match
+}
+
+async function zoomImage(index) {
+  const prev = indexZoomed.value
+  let cancel
+
+  // 1) apaga vídeo y limpia src para forzar desmontaje
+  showVideo.value = false
+  linkVideo.value = ''
+  await nextTick()
+
+  // 2) prepara nuevo src ANTES de animar
+  linkVideo.value = getVideoUrlByIndex(index)
+
+  // 3) resetea el zoom y anima
   indexZoomed.value = void 0
 
-  if (index !== void 0 && index !== indexZoomedState) {
+  if (index !== void 0 && index !== prev) {
     cancel = morph({
       from: thumbRef.value[index].$el,
       onToggle: () => {
         indexZoomed.value = index
-        showVideo.value = true // <- 🔥 aseguramos que se active
+        // 4) enciende el vídeo solo si hay URL válida
+        showVideo.value = !!linkVideo.value
       },
       duration: 500,
-      onEnd: (end) => {
+      onEnd: async (end) => {
+        // si se cierra la animación hacia atrás
         if (end === 'from' && indexZoomed.value === index) {
           indexZoomed.value = void 0
           showVideo.value = false
+          linkVideo.value = ''
+          await nextTick()
         }
       },
     })
   }
 
-  if (indexZoomedState !== void 0 && (cancel === void 0 || cancel() === false)) {
+  // 5) animación de cierre si había uno abierto
+  if (prev !== void 0 && (cancel === void 0 || cancel() === false)) {
     morph({
-      from: thumbRef.value[indexZoomedState].$el,
+      from: thumbRef.value[prev].$el,
       waitFor: 100,
       duration: 300,
     })
-    showVideo.value = false
-  }
-}
-
-async function onDialogShow() {
-  emit('shown') // opcional, por si el padre quiere reaccionar
-  if ($q.screen.lt.sm) return // no carga planeta en móviles
-  await nextTick()
-  if (planetContainer.value && !destroyPlanet) {
-    destroyPlanet = initPlanet(planetContainer.value)
-  }
-}
-
-function onDialogHide() {
-  emit('hidden') // opcional
-  if (destroyPlanet) {
-    destroyPlanet()
-    destroyPlanet = null
   }
 }
 
@@ -221,15 +221,9 @@ onMounted(async () => {
   window.addEventListener('resize', () => {
     screenWidth.value = window.innerWidth
   })
-  await nextTick()
-  if (planetContainer.value && !destroyPlanet) {
-    destroyPlanet = initPlanet(planetContainer.value)
-  }
 })
 
 onUnmounted(() => {
-  destroyPlanet?.()
-  destroyPlanet = null
   window.removeEventListener('resize', () => {
     screenWidth.value = window.innerWidth
   })

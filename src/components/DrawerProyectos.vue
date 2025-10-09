@@ -22,6 +22,7 @@
       <q-card-section class="text-center">
         <div class="row justify-start">
           <!-- Columna izquierda: miniaturas -->
+
           <div class="col-auto q-pa-md">
             <div
               class="q-gutter-y-sm"
@@ -46,7 +47,18 @@
                 style="border-radius: 3%/5%"
                 :style="
                   index === indexZoomed
-                    ? 'width: 800px; max-width: clamp(230px, 45vw, 500px); margin-top: 10vh; margin-right: clamp(5vw, 7vw - 2vw, 13vw);'
+                    ? `
+        position: fixed;
+        top: ${screenWidth < 400 ? '28vh' : '33vh'};
+        left: 64%;
+        transform: translate(-50%, -50%);
+        width: clamp(250px, 48vw, 600px);
+        max-height: 78vh;
+        z-index: 2000;
+        border-radius: 12px;
+        transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
+
+      `
                     : void 0
                 "
                 :src="src"
@@ -55,7 +67,9 @@
               />
             </div>
           </div>
-
+          <!--  <div v-if="!$q.screen.lt.sm" class="col-xs-12 col-sm-4 text-center q-mb-md planet-col">
+            <div ref="planetContainer" class="planet-box"></div>
+          </div> -->
           <!-- Columna derecha: contenido “aaa” -->
           <div class="col grow q-pa-md content-col">
             <div class="content-placeholder">
@@ -83,7 +97,7 @@
 import { ref, watch, nextTick, onMounted, onUnmounted, onBeforeUpdate } from 'vue'
 import { useQuasar, morph } from 'quasar'
 import { initPlanet } from '../assets/js/planet.js'
-
+const screenWidth = ref(0)
 /*
   🧩 Props
   - El padre controla la visibilidad con v-model o :visible.
@@ -185,6 +199,10 @@ watch(localVisible, (val) => emit('update:modelValue', val))
 /*♻️ Limpieza en desmontaje*/
 
 onMounted(async () => {
+  screenWidth.value = window.innerWidth
+  window.addEventListener('resize', () => {
+    screenWidth.value = window.innerWidth
+  })
   await nextTick()
   if (planetContainer.value && !destroyPlanet) {
     destroyPlanet = initPlanet(planetContainer.value)
@@ -194,6 +212,9 @@ onMounted(async () => {
 onUnmounted(() => {
   destroyPlanet?.()
   destroyPlanet = null
+  window.removeEventListener('resize', () => {
+    screenWidth.value = window.innerWidth
+  })
 })
 onBeforeUpdate(() => {
   thumbRef.value = []

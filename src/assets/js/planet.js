@@ -208,7 +208,7 @@ export function initPlanet(containerEl) {
   const material = new THREE.MeshStandardMaterial({
     color: 0x111122,
     metalness: 0.8,
-    roughness: 0.2,
+    roughness: 0,
     emissive: 0x220044,
     emissiveIntensity: 2.0,
   })

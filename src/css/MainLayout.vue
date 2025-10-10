@@ -330,7 +330,7 @@ const particlesLoaded = async (container) => {
 
 .hero-subtitle {
   font-family: 'Orbitron', sans-serif;
-  font-size: 2rem;
+  font-size: 1rem;
   font-weight: 500;
   color: #ffffff;
   letter-spacing: 1px;

@@ -51,16 +51,13 @@
           max-height: 78vh;
           z-index: 2000;
           border-radius: 12px;
-          transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;
-        `
+          transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;`
                       : void 0
                   "
                   :src="src"
                   @click="zoomImage(index)"
                   loading="lazy"
                 />
-
-                <!-- 🎥 Video embebido SOLO dentro de la imagen ampliada -->
                 <!-- 🎥 Video embebido SOLO dentro de la imagen ampliada -->
                 <transition name="fade">
                   <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
@@ -77,16 +74,11 @@
             </div>
           </div>
 
-          <!--  <div v-if="!$q.screen.lt.sm" class="col-xs-12 col-sm-4 text-center q-mb-md planet-col">
-            <div ref="planetContainer" class="planet-box"></div>
-          </div> -->
           <!-- Columna derecha: contenido “aaa” -->
           <div class="col grow q-pa-md content-col">
             <div class="content-placeholder">
-              <p>
-                Lorem ipsum is a dummy or placeholder text commonly used in graphic design,
-                publishing, and web development. Its purpose is to permit a page layout to be
-                designed, independently of the copy that will subsequently populate it, or to
+              <p style="color: white" class="descripcionProyecto">
+                {{ videoNotes }}
               </p>
             </div>
           </div>
@@ -140,18 +132,25 @@ const images = ref(
     .fill(null)
     .map((_, i) => '/public/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
 )
-
+const descripcionVideo = {
+  dnsDynamic:
+    'Proyecto ágil desarrollado para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo.  Actualmente sigue en fase de iteración y mejoras.',
+  dustrbike:
+    'Experimento inicial con Quasar Framework para poner a prueba sus límites en rendimiento y escalabilidad. Este proyecto marcó el inicio de una serie de optimizaciones y aprendizajes que hoy aplico en desarrollos más avanzados.',
+}
 const videosDeProyecto = {
   // Clave (Key)     : Valor (Value)
   dnsDynamic: 'https://www.youtube.com/embed/AKFEbd8mjNE?autoplay=1&mute=1&rel=0&modestbranding=1',
-  dustrbike: 'https://www.youtube.com/embed/-WEWVsC8CyA?si=3cmgnepeZ4t0Renf',
+  dustrbike:
+    'https://www.youtube.com/embed/g4DmVtIZa5U?si=RdFjHemaB91eXu-I&autoplay=1&mute=1&rel=0&modestbranding=1',
 }
 const showVideo = ref(false)
 const linkVideo = ref('')
+const videoNotes = ref('')
 
-function getVideoUrlByIndex(index) {
+function getVideoUrlAndData(index) {
   const key = arrayimages[index] // p.ej. 'dnsDynamic'
-  return videosDeProyecto[key] || '' // fallback vacío si no hay match
+  return key || '' // fallback vacío si no hay match
 }
 
 async function zoomImage(index) {
@@ -164,8 +163,10 @@ async function zoomImage(index) {
   await nextTick()
 
   // 2) prepara nuevo src ANTES de animar
-  linkVideo.value = getVideoUrlByIndex(index)
 
+  let key = getVideoUrlAndData(index)
+  linkVideo.value = videosDeProyecto[key]
+  videoNotes.value = descripcionVideo[key]
   // 3) resetea el zoom y anima
   indexZoomed.value = void 0
 

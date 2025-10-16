@@ -15,15 +15,18 @@
   >
     <q-card class="cyber-card metal-drawer">
       <!-- Botón de cerrar -->
-      <div class="close-btn-container">
-        <q-btn flat round dense icon="close" color="primary" @click="close" />
+      <div>
+        <div class="close-btn-container">
+          <h4 class="text-h4 margins">Inicio</h4>
+          <q-btn flat dense icon="close" color="red" @click="close" />
+        </div>
       </div>
 
       <!-- CONTENIDO PRINCIPAL DEL DRAWER -->
       <q-card-section class="text-center">
         <!-- Hero -->
         <div class="text-h2 q-mb-sm neon-text text-grey-5">Construyendo el futuro digital</div>
-        <div class="text-h3 q-mb-md text-grey-5">Fullstack + Agentes IA + IoT</div>
+        <div class="text-h3 q-mb-md">Fullstack + Agentes IA + IoT</div>
 
         <!-- CTA -->
         <q-btn glossy class="btnProyectos" size="md" label="Explorar proyectos" />
@@ -33,7 +36,7 @@
           <!-- FULLSTACK -->
           <div class="col-xs-12 col-sm-4 text-center q-mb-md fs-col">
             <q-icon name="code" size="60px" color="cyan" />
-            <div class="text-h4 q-mt-xs text-grey-3">Fullstack</div>
+            <div class="text-h4 q-mt-xs">Fullstack</div>
             <p class="text-grey-5">
               Apps web seguras y escalables que impulsan tu negocio. Entrega ágil sin sacrificar
               calidad en el código. Garantizamos integraciones fluidas con sistemas legacy y APIs,
@@ -49,7 +52,7 @@
           <!-- IoT -->
           <div class="col-xs-12 col-sm-4 text-center q-mb-md iot-col">
             <q-icon name="sensors" size="60px" color="amber" />
-            <div class="text-h4 q-mt-xs text-grey-3">IoT</div>
+            <div class="text-h4 q-mt-xs">IoT</div>
             <p class="text-grey-5">
               Prototipos funcionales y telemetría fiable con ESP32/Arduino. Construimos soluciones
               IoT a medida para validar ideas de control físico y domótica. Aseguramos la conexión
@@ -62,7 +65,7 @@
         <!-- Agentes IA -->
         <div class="text-center">
           <q-icon name="memory" size="60px" color="purple" />
-          <div class="text-h4 q-mt-xs text-grey-3">Agentes IA</div>
+          <div class="text-h4 q-mt-xs">Agentes IA</div>
           <p class="text-grey-5 q-mx-auto" style="width: 50%">
             Nos enfocamos en el potencial de la automatización y el análisis inteligente. Esta área
             está en fase de prueba y aprendizaje. Pronto incorporaremos Agentes IA para impulsar la
@@ -177,15 +180,3 @@ onUnmounted(() => {
 */
 defineExpose({ close })
 </script>
-<style scoped>
-.close-btn-container {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(10, 10, 20, 0.7); /* fondo semitransparente para legibilidad */
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: flex-end;
-  padding: 0.5rem 1rem;
-}
-</style>

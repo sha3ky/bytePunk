@@ -13,8 +13,11 @@
   >
     <q-card class="cyber-card metal-drawer">
       <!-- Botón de cerrar -->
-      <div class="close-btn-container">
-        <q-btn flat round dense icon="close" color="primary" @click="close" />
+      <div>
+        <div class="close-btn-container">
+          <h4 class="text-h4 margins">Proyectos</h4>
+          <q-btn flat dense icon="close" color="red" @click="close" />
+        </div>
       </div>
 
       <q-card-section class="text-center">
@@ -130,20 +133,26 @@ const arrayimages = [
 const images = ref(
   Array(7)
     .fill(null)
-    .map((_, i) => '/public/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
+    .map((_, i) => '/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
 )
 const descripcionVideo = {
   dnsDynamic:
     'Proyecto ágil desarrollado para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo.  Actualmente sigue en fase de iteración y mejoras.',
   dustrbike:
     'Experimento inicial con Quasar Framework para poner a prueba sus límites en rendimiento y escalabilidad. Este proyecto marcó el inicio de una serie de optimizaciones y aprendizajes que hoy aplico en desarrollos más avanzados.',
+  jtcars:
+    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubri la facilidad que tiene este framework para escalar y para usar.',
 }
 const videosDeProyecto = {
   // Clave (Key)     : Valor (Value)
-  dnsDynamic: 'https://www.youtube.com/embed/AKFEbd8mjNE?autoplay=1&mute=1&rel=0&modestbranding=1',
+  dnsDynamic:
+    'https://www.youtube.com/embed/AMAIv0ZH1hs?si=fv4n7gWfr52njJV&autoplay=1&mute=1&rel=0&modestbranding=1',
   dustrbike:
     'https://www.youtube.com/embed/g4DmVtIZa5U?si=RdFjHemaB91eXu-I&autoplay=1&mute=1&rel=0&modestbranding=1',
+  jtcars:
+    'https://www.youtube.com/embed/GlIQvOBZtTA?si=LuyC6uvNDd6w3QzF&autoplay=1&mute=1&rel=0&modestbranding=1',
 }
+
 const showVideo = ref(false)
 const linkVideo = ref('')
 const videoNotes = ref('')
@@ -240,15 +249,3 @@ onBeforeUpdate(() => {
 */
 defineExpose({ close })
 </script>
-<style scoped>
-.close-btn-container {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(10, 10, 20, 0.7); /* fondo semitransparente para legibilidad */
-  backdrop-filter: blur(4px);
-  display: flex;
-  justify-content: center;
-  padding: 0.5rem 1rem;
-}
-</style>

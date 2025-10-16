@@ -1,7 +1,43 @@
 // app global css in SCSS form
-@font-face {
+
+/* @font-face {
   font-family: 'GlitchGoblin';
   src: url('/fonts/GlitchGoblin-2O87v.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
+} */
+
+@font-face {
+  font-family: Cyber;
+  src: url('https://assets.codepen.io/605876/Blender-Pro-Bold.otf');
+  font-display: swap;
+}
+
+.text-h4 {
+  font-family: Cyber;
+  color: #dcd5d5;
+}
+.text-h3 {
+  font-family: Cyber;
+  color: #dcd5d5;
+}
+.neon-text {
+  font-size: 2.8rem; /* más grande */
+  text-shadow:
+    0 0 12px #00ffff,
+    0 0 24px #00ffff;
+}
+.margins {
+  margin: 0px;
+  padding: 0px;
+}
+.close-btn-container {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(10, 10, 20, 0.7); /* fondo semitransparente para legibilidad */
+  backdrop-filter: blur(4px);
+  display: flex;
+  justify-content: space-around;
+  padding: 0.5rem 1rem;
 }

@@ -13,7 +13,7 @@
 }
 
 .loader-spinner {
-  font-family: 'Orbitron', sans-serif;
+  font-family: Cyber;
   font-size: 2.5rem;
   color: #fcee09;
   animation: flicker 1.2s infinite;

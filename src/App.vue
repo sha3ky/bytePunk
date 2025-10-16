@@ -9,4 +9,4 @@
 <style src="./css/panelRight.css"></style>
 <style src="./css/panelBottom.css"></style>
 <style src="./css/loadingPage.css"></style>
-<style src="./css/baseStyle.css"></style>
+<style src="./css/drawersBases.css"></style>

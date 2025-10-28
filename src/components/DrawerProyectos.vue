@@ -83,6 +83,27 @@
               <p style="color: white" class="descripcionProyecto">
                 {{ videoNotes }}
               </p>
+
+              <div
+                v-if="showLinkControlHorario"
+                class="flex flex-center"
+                style="max-width: 50vh; margin: 0 auto"
+              >
+                <q-item
+                  clickable
+                  v-ripple
+                  href="https://controlhorariox.netlify.app/#/"
+                  target="_blank"
+                  style="color: white; border: 1px solid white; border-radius: 4px"
+                  class="q-px-lg q-py-sm"
+                >
+                  <q-item-section avatar>
+                    <q-icon name="launch" color="white" />
+                  </q-item-section>
+
+                  <q-item-section> Control Horario (Proyecto Local) </q-item-section>
+                </q-item>
+              </div>
             </div>
           </div>
         </div>
@@ -117,7 +138,7 @@ const props = defineProps({
 */
 const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
 const localVisible = ref(props.modelValue)
-
+const showLinkControlHorario = ref(false)
 /* zoom imagenes */
 const thumbRef = ref([])
 const indexZoomed = ref(void 0)
@@ -128,7 +149,7 @@ const arrayimages = [
   'lottery',
   'plantsIA',
   'shiftclock',
-  'Aiteacher',
+  'smartStudy',
 ]
 const images = ref(
   Array(7)
@@ -141,8 +162,15 @@ const descripcionVideo = {
   dustrbike:
     'Experimento inicial con Quasar Framework para poner a prueba sus límites en rendimiento y escalabilidad. Este proyecto marcó el inicio de una serie de optimizaciones y aprendizajes que hoy aplico en desarrollos más avanzados.',
   jtcars:
-    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubri la facilidad que tiene este framework para escalar y para usar.',
+    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubrí la facilidad que tiene este framework para escalar y para usar.',
+  lottery:
+    'Proyecto en desarollo, la unión de frontend, backend, movimientos, sonidos, lógica es algo que me motiva para seguir utilizando distintas herramientas de lo más variadas.',
+  smartStudy:
+    'Proyecto divertido para niños que quieran aprender con la ayuda de una IA. Aún en desarollo asi que cualquier duda me lo comentais.',
+  shiftclock:
+    'Otro proyecto útil para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados.',
 }
+
 const videosDeProyecto = {
   // Clave (Key)     : Valor (Value)
   dnsDynamic:
@@ -150,7 +178,13 @@ const videosDeProyecto = {
   dustrbike:
     'https://www.youtube.com/embed/g4DmVtIZa5U?si=RdFjHemaB91eXu-I&autoplay=1&mute=1&rel=0&modestbranding=1',
   jtcars:
-    'https://www.youtube.com/embed/GlIQvOBZtTA?si=LuyC6uvNDd6w3QzF&autoplay=1&mute=1&rel=0&modestbranding=1',
+    'https://www.youtube.com/embed/Hdr3X0rF4Go?si=ice48WyBuCYFvars&autoplay=1&mute=1&rel=0&modestbranding=1',
+  lottery:
+    'https://www.youtube.com/embed/zFbQqwFu12c?si=tAer0OpaxweSlUyU&autoplay=1&mute=1&rel=0&modestbranding=1',
+  smartStudy:
+    'https://www.youtube.com/embed/1xIGW-drB44?si=x788Ws5R4N2nbyj5&autoplay=1&mute=1&rel=0&modestbranding=1',
+  shiftclock:
+    'https://www.youtube.com/embed/jQd_CPiV2vo?si=t9Xa0TldavXOSEmu&autoplay=1&mute=1&rel=0&modestbranding=1',
 }
 
 const showVideo = ref(false)
@@ -174,8 +208,13 @@ async function zoomImage(index) {
   // 2) prepara nuevo src ANTES de animar
 
   let key = getVideoUrlAndData(index)
+  debugger
   linkVideo.value = videosDeProyecto[key]
   videoNotes.value = descripcionVideo[key]
+  key === 'shiftclock'
+    ? (showLinkControlHorario.value = true)
+    : (showLinkControlHorario.value = false)
+
   // 3) resetea el zoom y anima
   indexZoomed.value = void 0
 

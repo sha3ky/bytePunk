@@ -158,17 +158,19 @@ const images = ref(
 )
 const descripcionVideo = {
   dnsDynamic:
-    'Proyecto ágil desarrollado para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo.  Actualmente sigue en fase de iteración y mejoras.',
+    'Proyecto ágil desarrollado para un amigo que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo. La comunicación continua nos ayuda a pulir posibles bugs.',
   dustrbike:
-    'Experimento inicial con Quasar Framework para poner a prueba sus límites en rendimiento y escalabilidad. Este proyecto marcó el inicio de una serie de optimizaciones y aprendizajes que hoy aplico en desarrollos más avanzados.',
+    'Experimento inicial con Quasar Framework para poner a prueba sus límites. Aún en desarrollo y mejora continua, implementar un lazy-loading ayudaría a eliminar esos efectos de carga. En breve añadiré mejoras y optimizaciones.',
   jtcars:
-    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubrí la facilidad que tiene este framework para escalar y para usar.',
+    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubrí la facilidad que tiene este framework para escalar y para usar. Proyecto completado y desplegado a la espera de cambiar del dominio provisional al definitivo.',
   lottery:
-    'Proyecto en desarollo, la unión de frontend, backend, movimientos, sonidos, lógica es algo que me motiva para seguir utilizando distintas herramientas de lo más variadas.',
+    'Proyecto en desarrollo, la unión de frontend, backend, movimientos, sonidos, lógica es algo que me motiva para seguir utilizando distintas herramientas de lo más variadas. Proyecto en fase de testing.',
   smartStudy:
-    'Proyecto divertido para niños que quieran aprender con la ayuda de una IA. Aún en desarollo asi que cualquier duda me lo comentais.',
+    'Proyecto divertido para niños que quieran aprender con la ayuda de una IA. Pendiente de cambiar por una IA más inteligente en un futuro próximo.',
   shiftclock:
-    'Otro proyecto útil para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados.',
+    'Otro proyecto útil para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados para un control horario fácil de usar.',
+  plantsIA:
+    'Proyecto fullstack en estado avanzado. Uno de mis primeros proyectos donde he insertado una IA específica. La IA es en versión base, funciona a las mil maravillas pero aún así a veces me encuentro algún que otro bug.',
 }
 
 const videosDeProyecto = {
@@ -185,6 +187,8 @@ const videosDeProyecto = {
     'https://www.youtube.com/embed/1xIGW-drB44?si=x788Ws5R4N2nbyj5&autoplay=1&mute=1&rel=0&modestbranding=1',
   shiftclock:
     'https://www.youtube.com/embed/jQd_CPiV2vo?si=t9Xa0TldavXOSEmu&autoplay=1&mute=1&rel=0&modestbranding=1',
+  plantsIA:
+    'https://www.youtube.com/embed/Y8Xxh1kEirM?si=XoUzJc_7niYdtM0Y&autoplay=1&mute=1&rel=0&modestbranding=1',
 }
 
 const showVideo = ref(false)

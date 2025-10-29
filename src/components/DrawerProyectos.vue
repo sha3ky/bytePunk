@@ -32,7 +32,7 @@
                 overflow-y: auto;
                 width: 300px;
                 max-width: 20vw;
-                max-height: 80vh;
+                max-height: 70vh;
               "
             >
               <!--  <div v-for="(src, index) in images" :key="index" class="relative-position">
@@ -107,32 +107,30 @@
           </div>
 
           <!-- Columna derecha: contenido “aaa” -->
-          <div class="col grow q-pa-md content-col">
-            <div class="content-placeholder">
-              <p style="color: white" class="descripcionProyecto">
-                {{ videoNotes }}
-              </p>
+          <div class="content-placeholder">
+            <p style="color: white" class="descripcionProyecto">
+              {{ videoNotes }}
+            </p>
 
-              <div
-                v-if="showLinkControlHorario"
-                class="flex flex-center"
-                style="max-width: 50vh; margin: 0 auto"
+            <div
+              v-if="showLinkControlHorario"
+              class="flex flex-center"
+              style="max-width: 50vh; margin: 0 auto"
+            >
+              <q-item
+                clickable
+                v-ripple
+                href="https://controlhorariox.netlify.app/#/"
+                target="_blank"
+                style="color: white; border: 1px solid white; border-radius: 4px"
+                class="q-px-lg q-py-sm"
               >
-                <q-item
-                  clickable
-                  v-ripple
-                  href="https://controlhorariox.netlify.app/#/"
-                  target="_blank"
-                  style="color: white; border: 1px solid white; border-radius: 4px"
-                  class="q-px-lg q-py-sm"
-                >
-                  <q-item-section avatar>
-                    <q-icon name="launch" color="white" />
-                  </q-item-section>
+                <q-item-section avatar>
+                  <q-icon name="launch" color="white" />
+                </q-item-section>
 
-                  <q-item-section> Control Horario (Proyecto Local) </q-item-section>
-                </q-item>
-              </div>
+                <q-item-section> Control Horario (Proyecto Local) </q-item-section>
+              </q-item>
             </div>
           </div>
         </div>
@@ -187,7 +185,7 @@ const images = ref(
 )
 const descripcionVideo = {
   dnsDynamic:
-    'Proyecto ágil desarrollado para un amigo que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo. La comunicación continua nos ayuda a pulir posibles bugs.',
+    'Proyecto ágil desarrollado para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo. La comunicación continua nos ayuda a pulir posibles bugs.',
   dustrbike:
     'Experimento inicial con Quasar Framework para poner a prueba sus límites. Aún en desarrollo y mejora continua, implementar un lazy-loading ayudaría a eliminar esos efectos de carga. En breve añadiré mejoras y optimizaciones.',
   jtcars:
@@ -197,7 +195,7 @@ const descripcionVideo = {
   smartStudy:
     'Proyecto divertido para niños que quieran aprender con la ayuda de una IA. Pendiente de cambiar por una IA más inteligente en un futuro próximo.',
   shiftclock:
-    'Otro proyecto útil para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados para un control horario fácil de usar.',
+    'Otro proyecto para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados para un control horario fácil de usar.',
   plantsIA:
     'Proyecto fullstack en estado avanzado. Uno de mis primeros proyectos donde he insertado una IA específica. La IA es en versión base, funciona a las mil maravillas pero aún así a veces me encuentro algún que otro bug.',
 }

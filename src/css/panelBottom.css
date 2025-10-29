@@ -148,3 +148,10 @@
   -webkit-text-fill-color: transparent;
   font-weight: bold;
 }
+.content-placeholder {
+  font-size: clamp(1.1rem, 1vw + 0.8rem, 1.4rem);
+  width: 50%;
+  justify-content: center;
+  display: flex;
+  margin-top: 36vh;
+}

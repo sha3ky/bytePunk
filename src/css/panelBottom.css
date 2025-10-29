@@ -1,23 +1,67 @@
-@keyframes slideInBottom {
+/* Miniatura normal */
+.thumbnail {
+  transition: all 0.3s ease-in-out;
+}
+
+/* Miniatura cuando está ampliada (oculta) */
+.thumbnail-zoomed {
+  opacity: 0;
+  visibility: hidden;
+}
+
+/* Imagen ampliada - MISMAS DIMENSIONES que el iframe */
+.zoomed-image {
+  position: fixed;
+  top: 33vh; /* MISMA posición que el iframe */
+  left: 64%; /* MISMA posición que el iframe */
+  transform: translate(-50%, -50%);
+  width: clamp(250px, 75vw, 800px);
+  height: calc(clamp(250px, 75vw, 800px) * 9 / 16);
+  max-height: 78vh;
+  z-index: 2000;
+  border-radius: 12px;
+  cursor: pointer;
+  object-fit: cover; /* Para que la imagen se ajuste al contenedor */
+}
+
+/* Animación para la imagen ampliada */
+.zoom-enter-active {
+  animation: zoomIn 0.4s ease-out;
+}
+.zoom-leave-active {
+  animation: zoomOut 0.3s ease-in;
+}
+
+@keyframes zoomIn {
   from {
-    transform: translateY(100%);
     opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
   }
   to {
-    transform: translateY(0%);
     opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
   }
 }
-.animated-drawerBottom {
-  animation: slideInBottom 0.6s ease-out;
-  border-radius: 15px;
+
+@keyframes zoomOut {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.8);
+  }
 }
+
+/* Iframe wrapper - MISMAS DIMENSIONES que la imagen ampliada */
 .iframe-wrapper {
   position: fixed;
-  top: 33vh; /* base escritorio */
+  top: 33vh;
   left: 64%;
   transform: translate(-50%, -50%);
   width: clamp(250px, 75vw, 800px);
+  height: calc(clamp(250px, 75vw, 800px) * 9 / 16);
   aspect-ratio: 16 / 9;
   z-index: 2100;
   border-radius: 12px;
@@ -30,43 +74,68 @@
   height: 100%;
   border: none;
   display: block;
-  object-fit: cover;
+  border-radius: 12px;
 }
 
-/* 🔹 iPhone SE, móviles muy pequeños (< 400px de ancho) */
-@media (max-width: 400px) {
-  .iframe-wrapper {
-    top: 20vh; /* más arriba */
-    left: 65%; /* centrado */
-    width: 62vw; /* usa casi todo el ancho */
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
+/* Animación para el iframe */
+.slide-up-enter-active {
+  animation: slideUp 0.5s ease-out;
+}
+.slide-up-leave-active {
+  animation: slideUp 0.3s ease-in reverse;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) translateY(30px); /* Mantener el centrado */
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) translateY(0);
   }
 }
 
-/* 🔹 Smartphones medianos (401px–600px) */
-@media (min-width: 401px) and (max-width: 600px) {
+/* Ajustes responsive - MISMAS MEDIDAS para imagen y iframe */
+@media (max-width: 400px) {
+  .zoomed-image,
   .iframe-wrapper {
-    top: 29vh; /* posición más equilibrada */
+    top: 20vh;
+    left: 65%;
+    width: 62vw;
+    height: calc(62vw * 9 / 16);
+  }
+}
+
+@media (min-width: 401px) and (max-width: 600px) {
+  .zoomed-image,
+  .iframe-wrapper {
+    top: 29vh;
     left: 65%;
     width: clamp(280px, 60vw, 560px);
+    height: calc(clamp(280px, 60vw, 560px) * 9 / 16);
   }
 }
 
 @media (min-width: 601px) and (max-width: 900px) {
+  .zoomed-image,
   .iframe-wrapper {
-    top: 34vh; /* 🔽 antes 31vh, ahora más centrado verticalmente */
+    top: 34vh;
     left: 65%;
-    width: clamp(300px, 50vw, 560px); /* 🔧 un poco más estrecho */
-  }
-}
-@media (min-width: 900px) and (max-width: 1500px) {
-  .iframe-wrapper {
-    top: 34vh; /* 🔽 antes 31vh, ahora más centrado verticalmente */
-    left: 65%;
-    width: clamp(300px, 50vw, 760px); /* 🔧 un poco más estrecho */
+    width: clamp(300px, 50vw, 560px);
+    height: calc(clamp(300px, 50vw, 560px) * 9 / 16);
   }
 }
 
+@media (min-width: 900px) and (max-width: 1500px) {
+  .zoomed-image,
+  .iframe-wrapper {
+    top: 34vh;
+    left: 65%;
+    width: clamp(300px, 50vw, 760px);
+    height: calc(clamp(300px, 50vw, 760px) * 9 / 16);
+  }
+}
 .descripcionProyecto {
   font-family: Cyber;
   color: #00ffff; /* azul neón */
@@ -74,8 +143,6 @@
     0 0 10px #00ffff,
     0 0 20px #0099ff;
   letter-spacing: 1px;
-}
-.descripcionProyecto {
   background: linear-gradient(90deg, #00ffff, #ff00ff);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;

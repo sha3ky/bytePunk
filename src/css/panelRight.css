@@ -42,3 +42,6 @@
   /* El margen superior baja dinámicamente con pantallas pequeñas */
   margin-top: clamp(1vh, 3vh - 1vw, 4vh);
 }
+.text-size {
+  font-size: clamp(1.1rem, 1vw + 0.8rem, 1.4rem);
+}

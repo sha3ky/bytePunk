@@ -35,8 +35,8 @@
                 max-height: 80vh;
               "
             >
-              <div v-for="(src, index) in images" :key="index" class="relative-position">
-                <!-- Miniatura -->
+              <!--  <div v-for="(src, index) in images" :key="index" class="relative-position">
+
                 <q-img
                   v-show="!showVideo || index !== indexZoomed"
                   :ref="(el) => (thumbRef[index] = el)"
@@ -61,7 +61,7 @@
                   @click="zoomImage(index)"
                   loading="lazy"
                 />
-                <!-- 🎥 Video embebido SOLO dentro de la imagen ampliada -->
+
                 <transition name="fade">
                   <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
                     <iframe
@@ -70,7 +70,36 @@
                       allow="autoplay; encrypted-media"
                       allowfullscreen
                     ></iframe>
-                    <!--  "allow" ="autoplay; encrypted-media"  -->
+
+                  </div>
+                </transition>
+              </div> -->
+
+              <!-- En tu template -->
+              <div v-for="(src, index) in images" :key="index" class="relative-position">
+                <!-- Miniatura -->
+                <q-img
+                  v-show="!showVideo || index !== indexZoomed"
+                  :ref="(el) => (thumbRef[index] = el)"
+                  class="cursor-pointer"
+                  :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
+                  style="border-radius: 3%/5%"
+                  :style="index === indexZoomed ? getZoomedImageStyle() : void 0"
+                  :src="src"
+                  @click="zoomImage(index)"
+                  loading="lazy"
+                />
+
+                <!-- Video -->
+                <transition name="slide-up">
+                  <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
+                    <iframe
+                      :key="linkVideo"
+                      :src="linkVideo"
+                      allow="autoplay; encrypted-media"
+                      allowfullscreen
+                      class="video-iframe"
+                    ></iframe>
                   </div>
                 </transition>
               </div>
@@ -199,56 +228,88 @@ function getVideoUrlAndData(index) {
   const key = arrayimages[index] // p.ej. 'dnsDynamic'
   return key || '' // fallback vacío si no hay match
 }
-
+const getZoomedImageStyle = () => {
+  const isMobile = screenWidth.value < 400
+  return {
+    position: 'fixed',
+    top: isMobile ? '28vh' : '33vh',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 'clamp(250px, 75vw, 800px)',
+    height: 'calc(clamp(250px, 75vw, 800px) * 9/16)', // Misma proporción 16:9
+    maxHeight: '78vh',
+    zIndex: '2000',
+    borderRadius: '12px',
+    transition: 'opacity 0.3s ease-in-out, filter 0.3s ease-in-out',
+  }
+}
 async function zoomImage(index) {
   const prev = indexZoomed.value
-  let cancel
 
-  // 1) apaga vídeo y limpia src para forzar desmontaje
+  // Si hacemos click en la misma imagen que ya está ampliada, cerrar
+  if (index === prev) {
+    // Cerrar la actual
+    showVideo.value = false
+    linkVideo.value = ''
+    indexZoomed.value = void 0
+
+    if (prev !== void 0) {
+      morph({
+        from: thumbRef.value[prev].$el,
+        duration: 300,
+      })
+    }
+    return
+  }
+
+  // 1) Apagar vídeo actual y limpiar
   showVideo.value = false
   linkVideo.value = ''
   await nextTick()
 
-  // 2) prepara nuevo src ANTES de animar
-
+  // 2) Preparar nuevo contenido ANTES de animar
   let key = getVideoUrlAndData(index)
-  debugger
   linkVideo.value = videosDeProyecto[key]
   videoNotes.value = descripcionVideo[key]
-  key === 'shiftclock'
-    ? (showLinkControlHorario.value = true)
-    : (showLinkControlHorario.value = false)
+  showLinkControlHorario.value = key === 'shiftclock'
 
-  // 3) resetea el zoom y anima
+  // 3) Resetear el zoom anterior
   indexZoomed.value = void 0
 
-  if (index !== void 0 && index !== prev) {
-    cancel = morph({
+  // 4) Si hay una imagen anterior abierta, cerrarla primero
+  if (prev !== void 0) {
+    await new Promise((resolve) => {
+      morph({
+        from: thumbRef.value[prev].$el,
+        duration: 300,
+        onEnd: resolve,
+      })
+    })
+    await nextTick()
+  }
+
+  // 5) Abrir nueva imagen
+  if (index !== void 0) {
+    morph({
       from: thumbRef.value[index].$el,
       onToggle: () => {
         indexZoomed.value = index
-        // 4) enciende el vídeo solo si hay URL válida
-        showVideo.value = !!linkVideo.value
       },
       duration: 500,
       onEnd: async (end) => {
-        // si se cierra la animación hacia atrás
+        // Si la animación termina en el estado "from" (cerrado)
         if (end === 'from' && indexZoomed.value === index) {
-          indexZoomed.value = void 0
           showVideo.value = false
           linkVideo.value = ''
+          indexZoomed.value = void 0
           await nextTick()
         }
+        // Si la animación termina en el estado "to" (abierto)
+        else if (end === 'to' && indexZoomed.value === index) {
+          // Encender el vídeo solo si hay URL válida después de la animación
+          showVideo.value = !!linkVideo.value
+        }
       },
-    })
-  }
-
-  // 5) animación de cierre si había uno abierto
-  if (prev !== void 0 && (cancel === void 0 || cancel() === false)) {
-    morph({
-      from: thumbRef.value[prev].$el,
-      waitFor: 100,
-      duration: 300,
     })
   }
 }

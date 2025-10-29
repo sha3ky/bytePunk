@@ -29,7 +29,7 @@
         <div class="text-h3 q-mb-md">Fullstack + Agentes IA + IoT</div>
 
         <!-- CTA -->
-        <q-btn glossy class="btnProyectos" size="md" label="Explorar proyectos" />
+        <!--  <q-btn glossy class="btnProyectos" size="md" label="Explorar proyectos" /> -->
 
         <!-- Mini secciones -->
         <div class="row justify-around q-mt-md section-preview">
@@ -37,10 +37,9 @@
           <div class="col-xs-12 col-sm-4 text-center q-mb-md fs-col">
             <q-icon name="code" size="60px" color="cyan" />
             <div class="text-h4 q-mt-xs">Fullstack</div>
-            <p class="text-grey-5">
+            <p class="text-grey-5 text-size">
               Apps web seguras y escalables que impulsan tu negocio. Entrega ágil sin sacrificar
-              calidad en el código. Garantizamos integraciones fluidas con sistemas legacy y APIs,
-              asegurando la seguridad desde el día cero.
+              calidad en el código.
             </p>
           </div>
 
@@ -53,11 +52,9 @@
           <div class="col-xs-12 col-sm-4 text-center q-mb-md iot-col">
             <q-icon name="sensors" size="60px" color="amber" />
             <div class="text-h4 q-mt-xs">IoT</div>
-            <p class="text-grey-5">
+            <p class="text-grey-5 text-size">
               Prototipos funcionales y telemetría fiable con ESP32/Arduino. Construimos soluciones
-              IoT a medida para validar ideas de control físico y domótica. Aseguramos la conexión
-              de sensores y la adquisición de datos en tiempo real, sentando las bases de sistemas
-              inteligentes y escalables.
+              IoT a medida para validar ideas de control físico y domótica.
             </p>
           </div>
         </div>
@@ -66,10 +63,9 @@
         <div class="text-center">
           <q-icon name="memory" size="60px" color="purple" />
           <div class="text-h4 q-mt-xs">Agentes IA</div>
-          <p class="text-grey-5 q-mx-auto" style="width: 50%">
+          <p class="text-grey-5 q-mx-auto text-size" style="width: 50%">
             Nos enfocamos en el potencial de la automatización y el análisis inteligente. Esta área
-            está en fase de prueba y aprendizaje. Pronto incorporaremos Agentes IA para impulsar la
-            eficiencia y la toma de decisiones.
+            está en fase de prueba y aprendizaje.
           </p>
         </div>
       </q-card-section>

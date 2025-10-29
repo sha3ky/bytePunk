@@ -10,3 +10,4 @@
 <style src="./css/panelBottom.css"></style>
 <style src="./css/loadingPage.css"></style>
 <style src="./css/drawersBases.css"></style>
+<style src="./css/panelLeft.css"></style>

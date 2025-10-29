@@ -14,6 +14,7 @@
 
           <!-- Partículas -->
           <vue-particles
+            v-if="showParticle"
             id="tsparticles"
             :options="particlesOptions"
             @particles-loaded="particlesLoaded"
@@ -56,15 +57,21 @@
 
       <DrawerInicio v-model="drawers.right" />
       <DrawerProyectos v-model="drawers.bottom" />
+      <DrawerSobreMi v-model="drawers.left" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted, computed, watch } from 'vue'
 
 import DrawerInicio from '../components/DrawerInicio.vue'
 import DrawerProyectos from 'src/components/DrawerProyectos.vue'
+import DrawerSobreMi from 'src/components/DrawerSobreMi.vue'
+import { useBoolean } from '../composable/useBoolean'
+
+// Usar el composable correctamente
+const { setBoolean, computedBoolean } = useBoolean()
 
 const loading = ref(true)
 const drawers = reactive({
@@ -73,17 +80,17 @@ const drawers = reactive({
   bottom: false,
   left: false,
 })
-
+const open = ref(false)
 const screenWidth = ref(window.innerWidth)
 /* const updateWidth = () => (screenWidth.value = window.innerWidth) */
 
-const open = ref(false)
 const items = [
-  { label: 'Inicio' }, // arriba
-  { label: 'Proyectos' }, // derecha
-  { label: 'Contacto' }, // abajo
-  { label: 'Sobre mí' }, // izquierda
+  { label: 'Inicio' },
+  { label: 'Proyectos' },
+  { label: 'Sobre mí' },
+  { label: 'Contacto' },
 ]
+const showParticle = computedBoolean('noParticle')
 
 const toggleMenu = () => (open.value = !open.value)
 
@@ -117,19 +124,39 @@ const onItemClick = (item) => {
     switch (item.label) {
       case 'Inicio':
         drawers.right = true
+
         break
       case 'Proyectos':
         drawers.bottom = true
+
         break
       case 'Contacto':
-        drawers.left = true
+        drawers.top = true
+
         break
       case 'Sobre mí':
-        drawers.top = true
+        drawers.left = true
+
         break
     }
   }, 400) // espera la animación del menú radial
 }
+
+const isAnyDrawerOpen = computed(() => {
+  return drawers.top || drawers.right || drawers.bottom || drawers.left
+})
+
+// Watch que controla las partículas basado en los drawers
+watch(isAnyDrawerOpen, (newValue) => {
+  debugger
+  if (newValue) {
+    // Si algún drawer se abre → OCULTAR partículas
+    setBoolean('noParticle', false)
+  } else {
+    // Si todos los drawers se cierran → MOSTRAR partículas
+    setBoolean('noParticle', true)
+  }
+})
 onMounted(async () => {
   // listener de resize
   /*   window.addEventListener('resize', updateWidth)

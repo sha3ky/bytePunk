@@ -15,9 +15,11 @@
     "postinstall": "quasar prepare"
   },
   "dependencies": {
+    "@lottiefiles/dotlottie-vue": "^0.10.6",
     "@quasar/extras": "^1.16.4",
     "@tsparticles/vue3": "^3.0.1",
     "axios": "^1.2.1",
+    "lottie-web": "^5.13.0",
     "pinia": "^3.0.1",
     "quasar": "^2.16.0",
     "three": "^0.180.0",

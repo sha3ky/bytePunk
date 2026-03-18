@@ -1,8 +1,4 @@
 <template>
-  <!-- El drawer usa Quasar QDialog controlado con v-model -->
-  <!-- Estado local del drawer -->
-  <!-- Cuando se muestra -->
-  <!-- Cuando se oculta -->
   <q-dialog
     v-model="localVisible"
     position="left"
@@ -13,345 +9,138 @@
     @show="onDialogShow"
     @hide="onDialogHide"
   >
-    <q-card class="cyber-card metal-drawer">
-      <!-- Botón de cerrar -->
-      <div>
-        <div class="close-btn-container">
-          <q-btn flat dense icon="close" color="red" @click="close" />
-          <h4 class="text-h4 margins">Sobre mi</h4>
-        </div>
+    <q-card class="cyber-card metal-drawer sobremi-card">
+      <!-- Header -->
+      <div class="close-btn-container" style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem;">
+        <h4 class="text-h4 margins" data-text="Sobre Mí">Sobre Mí</h4>
+        <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>
 
-      <!-- CONTENIDO PRINCIPAL DEL DRAWER -->
-      <q-card-section class="text-center">
-        <!-- Contenedor simple lado a lado -->
-        <div class="side-by-side-container">
-          <!-- Robot pequeño -->
-          <div>
+      <!-- Scrollable body -->
+      <div class="sobremi-body">
+        
+        <div class="profile-layout">
+          
+          <!-- Avatar / Side Info -->
+          <div class="profile-sidebar">
             <DotLottieVue
               v-if="showLottie"
               autoplay
               loop
               ref="playerRef"
               src="/animation/RobotSaludando.lottie"
-              class="small-robot"
-              style="width: 250px"
+              class="robot-lottie"
             />
+            <div class="sys-badge">
+              <span class="badge-label">PROFILE ID:</span>
+              <span class="badge-value text-cyan">SHA3KY_SYSADMIN</span>
+            </div>
+            <div class="sys-badge">
+              <span class="badge-label">CLASS:</span>
+              <span class="badge-value">FULLSTACK ARCHITECT</span>
+            </div>
           </div>
-          <!-- Preguntas -->
 
-          <div class="questions-side">
-            <h3 class="text-h4 q-mb-md text-cyan">Preguntas Frecuentes</h3>
+          <!-- Main Terminal / Story -->
+          <div class="profile-content">
+            <div class="terminal-ui">
+              <div class="term-header">
+                <div class="term-dots">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="term-title">sha3ky@bytepunk: ~</div>
+              </div>
+              
+              <div class="term-body">
+                <!-- Comando 1 -->
+                <div class="cmd-line">
+                  <span class="prompt">sha3ky@bytepunk:~$</span> cat about.txt
+                </div>
+                <div class="cmd-output">
+                  Llevo más de 5 años transformando ideas en código. No me limito a "crear webs", arquitecto ecosistemas digitales completos. Si un problema parece difícil, ahí es donde entro yo.
+                </div>
 
-            <q-expansion-item
-              class="question-expansion q-mb-sm"
-              expand-separator
-              default-closed
-              icon="person"
-              label="¿Quién soy?"
-              header-class="text-h6 text-white"
-              expand-icon-class="text-cyan"
-              group="sobremi-group"
-            >
-              <q-card class="question-card" flat>
-                <q-card-section class="q-pa-md">
-                  <div class="about-content">
-                    <!-- Introducción Personal -->
-                    <div class="about-section">
-                      <h4 class="text-cyan q-mb-md">👋 Mi Historia</h4>
-                      <p class="text-grey-4">
-                        Sha3ky, un apasionado desarrollador full-stack con 5 años de experiencia
-                        transformando ideas en soluciones digitales robustas y escalables.
-                      </p>
-                    </div>
+                <!-- Comando 2 -->
+                <div class="cmd-line">
+                  <span class="prompt">sha3ky@bytepunk:~$</span> ./scan_capabilities.sh --projects
+                </div>
+                <div class="cmd-output">
+                  <ul class="tree-list">
+                    <li>
+                      <span class="node text-cyan">[JT Cars]</span> 
+                      <span class="desc">└── Escalabilidad sólida Fullstack con Django y Vue 3.</span>
+                    </li>
+                    <li>
+                      <span class="node text-amber">[Plants IA & SmartStudy]</span> 
+                      <span class="desc">└── Integración de IA para hacer que la app "piense" sola.</span>
+                    </li>
+                    <li>
+                      <span class="node text-purple">[Lottery & DustrBike]</span> 
+                      <span class="desc">└── Animaciones fluidas, sonido y lógica interactiva pesada.</span>
+                    </li>
+                    <li>
+                      <span class="node text-green">[Shiftclock]</span> 
+                      <span class="desc">└── Foco en arquitecturas ultra privadas y seguras (Local-First).</span>
+                    </li>
+                    <li>
+                      <span class="node text-grey-4">[DNS Dynamic]</span> 
+                      <span class="desc">└── Entregas relámpago y prototipado ágil sin sacrificar impacto visual.</span>
+                    </li>
+                  </ul>
+                </div>
 
-                    <!-- Formación Académica -->
-                    <div class="about-section q-mt-lg">
-                      <h4 class="text-cyan q-mb-md">🎓 Formación & Estudios</h4>
-                      <div class="education-list">
-                        <div class="education-item q-mb-sm text-grey-4">
-                          <strong
-                            >CERTIFICAT PROFESSIONALITAT: [IFCD0210] Desenvolupament d'aplicacions
-                            amb tecnologia web</strong
-                          >
-                          <div class="text-grey-4">MECABIT • 31/07/2020</div>
-                        </div>
-                        <div class="education-item q-mb-sm text-grey-4">
-                          <strong>Técnico básico de ciberseguridad</strong>
-                          <div class="text-grey-4">INCIBE • 14/08/2023</div>
-                        </div>
-                      </div>
-                    </div>
+                <!-- Comando 3 -->
+                <div class="cmd-line">
+                  <span class="prompt">sha3ky@bytepunk:~$</span> cat philosophy.log
+                </div>
+                <div class="cmd-output text-grey-4">
+                  > Challenges First: Me gusta enfrentarme a los límites.<br>
+                  > Compromiso Total: Si empiezo algo, lo entrego al nivel máximo.<br>
+                  > Mens Sana in Corpore Sano: Natación, gimnasio, tatami y naturaleza.<br>  <br>Mantener la mente fuera del ordenador asegura el código más limpio.
+                </div>
 
-                    <!-- Experiencia Profesional -->
-                    <div class="about-section q-mt-lg">
-                      <h4 class="text-cyan q-mb-md">💼 Trayectoria Profesional</h4>
-                      <div class="experience-list">
-                        <div class="experience-item q-mb-md">
-                          <div class="flex justify-between items-center text-grey-4">
-                            <strong>Fullstack</strong>
-                            <span class="text-cyan">2025 - 2050</span>
-                          </div>
-                          <div class="text-grey-4">CyberPunk</div>
-                        </div>
-
-                        <div class="experience-item q-mb-md text-grey-4">
-                          <div class="flex justify-between items-center">
-                            <strong>Frontend</strong>
-                            <span class="text-cyan">2021 - 2023</span>
-                          </div>
-                          <div class="text-grey-4">Fiberpachs</div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Filosofía de Trabajo -->
-                    <div class="about-section q-mt-lg">
-                      <h4 class="text-cyan q-mb-md">🚀 Mi Filosofía</h4>
-                      <div class="philosophy-grid">
-                        <div class="philosophy-item">
-                          <strong>🎯 Orientado a Challenges</strong>
-                          <p class="text-grey-4 q-mt-xs">
-                            Me motiva enfrentar problemas y encontrar soluciones innovadoras que
-                            cumplan y superen las expectativas.
-                          </p>
-                        </div>
-
-                        <div class="philosophy-item">
-                          <strong>✅ Compromiso </strong>
-                          <p class="text-grey-4 q-mt-xs">
-                            Me entrego al 100% para garantizar que cada proyecto se complete con
-                            excelencia y dentro de los plazos establecidos.
-                          </p>
-                        </div>
-
-                        <div class="philosophy-item">
-                          <strong>🤝 Enfoque en el Cliente</strong>
-                          <p class="text-grey-4 q-mt-xs">
-                            Priorizo la comunicación clara y la comprensión profunda de las
-                            necesidades del cliente para entregar exactamente lo que necesitan.
-                          </p>
-                        </div>
-
-                        <div class="philosophy-item">
-                          <strong>💡 Innovación Constante</strong>
-                          <p class="text-grey-4 q-mt-xs">
-                            Siempre busco nuevas tecnologías y metodologías para mejorar procesos y
-                            entregar productos de vanguardia.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Metas Personales -->
-                    <div class="about-section q-mt-lg">
-                      <h4 class="text-cyan q-mb-md">🌟 Lo Que Me Motiva</h4>
-                      <p class="text-grey-4">
-                        Pasión por la tecnología, centrado en privacidad y aportando soluciones que
-                        impacten positivamente en la vida de las personas y buscando constantemente
-                        proyectos que representen un desafío técnico.
-                      </p>
-                    </div>
-
-                    <!-- Fuera del Trabajo -->
-                    <div class="about-section q-mt-lg">
-                      <h4 class="text-cyan q-mb-md">🎮 Más Allá del Código</h4>
-                      <p class="text-grey-4">
-                        En el tatami lo doy todo, cumplo a rajatabla lo de "Mente sana en corpore
-                        sano". Naturaleza, deporte y buena onda es mi motto.
-                      </p>
-                    </div>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-            <q-expansion-item
-              class="question-expansion q-mb-sm"
-              expand-separator
-              default-closed
-              icon="code"
-              label="¿Qué tecnologías y metodologías usas?"
-              header-class="text-h6 text-white"
-              expand-icon-class="text-cyan"
-              group="sobremi-group"
-            >
-              <q-card class="question-card" flat>
-                <q-card-section class="q-pa-md">
-                  <div class="tech-stack">
-                    <div class="stack-section">
-                      <strong class="text-cyan">🎨 Frontend:</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>Vue.js 3</strong> - Composition API, Pinia, Vue Router</li>
-                        <li><strong>Quasar Framework</strong> - Componentes UI y build tools</li>
-                        <li><strong>CSS3/Sass</strong> - Animaciones y diseños responsivos</li>
-                      </ul>
-                    </div>
-
-                    <div class="stack-section q-mt-md">
-                      <strong class="text-cyan">⚙️ Backend:</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>Django</strong> - Django REST Framework para APIs</li>
-                        <li><strong>PostgreSQL/MySQL</strong> - Bases de datos relacionales</li>
-                        <li><strong>Redis</strong> - Caché y sesiones</li>
-                      </ul>
-                    </div>
-
-                    <div class="stack-section q-mt-md">
-                      <strong class="text-cyan">🚀 DevOps & Tools:</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>Git/GitHub</strong> - Control de versiones y CI/CD</li>
-                        <li><strong>Vite</strong> - Build tool ultra rápido</li>
-                      </ul>
-                    </div>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-
-            <q-expansion-item
-              class="question-expansion q-mb-sm"
-              expand-separator
-              default-closed
-              icon="schedule"
-              label="¿Cuál es el proceso y timeline típico?"
-              header-class="text-h6 text-white"
-              expand-icon-class="text-cyan"
-              group="sobremi-group"
-            >
-              <q-card class="question-card" flat>
-                <q-card-section class="q-pa-md">
-                  <div class="timeline-process">
-                    <div class="process-phase">
-                      <strong class="text-cyan"
-                        >📋 Fase 1: Análisis & Planificación (1-3 días)</strong
-                      >
-                      <ul class="q-mt-xs">
-                        <li>Requisitos y especificaciones técnicas</li>
-                        <li>Diseño de arquitectura y base de datos</li>
-                        <li>Plan de desarrollo y milestones</li>
-                      </ul>
-                    </div>
-
-                    <div class="process-phase q-mt-md">
-                      <strong class="text-cyan">🎨 Fase 2: Diseño & Prototipo (1 semanas)</strong>
-                      <ul class="q-mt-xs">
-                        <li>Prototipo interactivo y UI/UX</li>
-                        <li>Design system y componentes</li>
-                        <li>Validación con el cliente</li>
-                      </ul>
-                    </div>
-
-                    <div class="process-phase q-mt-md">
-                      <strong class="text-cyan">⚡ Fase 3: Desarrollo (2-3 semanas)</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>MVP:</strong> 2-3 semanas (funcionalidades core)</li>
-                        <li><strong>Proyecto Medio:</strong> 4-6 semanas (features avanzados)</li>
-                        <li>
-                          <strong>Proyecto Complejo:</strong> 8+ semanas (sistemas escalables)
-                        </li>
-                      </ul>
-                    </div>
-
-                    <div class="process-phase q-mt-md">
-                      <strong class="text-cyan">🚀 Fase 4: Testing & Lanzamiento (3-7 días)</strong>
-                      <ul class="q-mt-xs">
-                        <li>Testing integral y corrección de bugs</li>
-                        <li>Despliegue en staging y producción</li>
-                        <li>Documentación y capacitación</li>
-                      </ul>
-                    </div>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
-
-            <q-expansion-item
-              class="question-expansion q-mb-sm"
-              expand-separator
-              default-closed
-              icon="build"
-              label="¿Qué incluye el soporte post-lanzamiento?"
-              header-class="text-h6 text-white"
-              expand-icon-class="text-cyan"
-              group="sobremi-group"
-            >
-              <q-card class="question-card" flat>
-                <q-card-section class="q-pa-md">
-                  <div class="support-details">
-                    <div class="support-tier">
-                      <strong class="text-cyan">🛡️ Soporte Básico (30 días incluido)</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>Corrección de bugs críticos</strong> en un máximo de 48h</li>
-                        <li><strong>Soporte técnico</strong> para issues de despliegue</li>
-                        <li><strong>Documentación técnica</strong> completa del proyecto</li>
-                      </ul>
-                    </div>
-
-                    <div class="support-tier q-mt-md">
-                      <strong class="text-cyan"
-                        >🚀 Soporte Extendido (Contratación adicional)</strong
-                      >
-                      <ul class="q-mt-xs">
-                        <li><strong>Mantenimiento mensual</strong> con updates de seguridad</li>
-                        <li><strong>Mejoras evolutivas</strong> y nuevas features</li>
-                        <li>
-                          <strong>Monitoreo 24/7</strong> y alertas de performance en el futuro
-                        </li>
-                        <li><strong>Backups automáticos</strong> y recovery plans en el futuro</li>
-                      </ul>
-                    </div>
-
-                    <div class="support-tier q-mt-md">
-                      <strong class="text-cyan">💡 Servicios Adicionales</strong>
-                      <ul class="q-mt-xs">
-                        <li><strong>Auditorías de código</strong> y best practices</li>
-                        <li><strong>Optimización de performance</strong> y SEO</li>
-                      </ul>
-                    </div>
-                  </div>
-                </q-card-section>
-              </q-card>
-            </q-expansion-item>
+                <!-- Cursor -->
+                <div class="cmd-line">
+                  <span class="prompt">sha3ky@bytepunk:~$</span> <span class="cursor-blink"></span>
+                </div>
+              </div>
+            </div>
           </div>
+
         </div>
-      </q-card-section>
+
+      </div>
     </q-card>
   </q-dialog>
 </template>
 
 <script setup>
-import { ref, watch, nextTick, onMounted, onUnmounted } from 'vue'
-
-/* import { useQuasar } from 'quasar' */
-/* import { initPlanet } from '../assets/js/planet.js' */
-
+import { ref, watch, nextTick, onMounted } from 'vue'
 import { DotLottieVue } from '@lottiefiles/dotlottie-vue'
-const playerRef = ref(null)
-/* const $q = useQuasar() */
-const showLottie = ref(false)
-let destroyPlanet = null
+
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
 })
 const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
+
 const localVisible = ref(props.modelValue)
+const playerRef = ref(null)
+const showLottie = ref(false)
 
 watch(
   () => props.modelValue,
-  (val) => (console.log('propsEmit', props.modelValue), (localVisible.value = val)),
+  (val) => {
+    localVisible.value = val
+  }
 )
 watch(localVisible, (val) => emit('update:modelValue', val))
 
 async function onDialogShow() {
-  emit('shown') // opcional, por si el padre quiere reaccionar
+  emit('shown')
 }
 
 function onDialogHide() {
-  emit('hidden') // opcional
-  if (destroyPlanet) {
-    destroyPlanet()
-    destroyPlanet = null
-  }
+  emit('hidden')
 }
 
 function close() {
@@ -365,15 +154,211 @@ onMounted(async () => {
   }, 1000)
 })
 
-onUnmounted(() => {})
-
-/*
-  🪄 defineExpose
-  - Permite al padre acceder a métodos internos si lo necesita.
-  - Ej: this.$refs.drawer.close()
-*/
 defineExpose({ close })
 </script>
-<style scoped></style>
 
-🎯
+<style scoped>
+.sobremi-card {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.sobremi-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.3) transparent;
+}
+
+.sobremi-body::-webkit-scrollbar {
+  width: 6px;
+}
+.sobremi-body::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+/* --- Layout Principal --- */
+.profile-layout {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 2.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.profile-sidebar {
+  flex-shrink: 0;
+  width: 250px;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.robot-lottie {
+  width: 100%;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.2));
+}
+
+.sys-badge {
+  display: flex;
+  flex-direction: column;
+  background: rgba(0, 255, 255, 0.05);
+  border-left: 3px solid #00ffff;
+  padding: 0.8rem 1rem;
+}
+
+.badge-label {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: rgba(200, 200, 255, 0.5);
+  letter-spacing: 1px;
+}
+
+.badge-value {
+  font-family: 'Cyber', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  margin-top: 0.2rem;
+}
+
+.profile-content {
+  flex: 1;
+  width: 100%;
+}
+
+/* --- Consola / Terminal --- */
+.terminal-ui {
+  background: rgba(4, 8, 15, 0.95);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  border-radius: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 255, 255, 0.02);
+  overflow: hidden;
+  font-family: monospace;
+}
+
+.term-header {
+  background: rgba(255, 255, 255, 0.03);
+  padding: 0.6rem 1rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.1);
+}
+
+.term-dots {
+  display: flex;
+  gap: 8px;
+}
+.term-dots span {
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: #ff5f56;
+}
+.term-dots span:nth-child(2) { background: #ffbd2e; }
+.term-dots span:nth-child(3) { background: #27c93f; }
+
+.term-title {
+  flex: 1;
+  text-align: center;
+  color: rgba(200, 200, 255, 0.4);
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+}
+
+.term-body {
+  padding: 2rem;
+  color: rgba(220, 220, 255, 0.85);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.cmd-line {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #fff;
+}
+.cmd-line:first-child {
+  margin-top: 0;
+}
+
+.prompt {
+  color: #00ffff;
+  font-weight: bold;
+  margin-right: 0.5rem;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+.cmd-output {
+  margin-bottom: 1.5rem;
+  padding-left: 0.5rem;
+}
+
+.tree-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.tree-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.node {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.desc {
+  color: rgba(200, 200, 255, 0.6);
+  padding-left: 0.5rem;
+  font-size: 0.85rem;
+}
+
+.cursor-blink {
+  display: inline-block;
+  width: 10px;
+  height: 1.2em;
+  background: #00ffff;
+  vertical-align: text-bottom;
+  animation: blink 1s step-end infinite;
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+@media (max-width: 900px) {
+  .sobremi-body {
+    padding: 1rem;
+  }
+  .profile-layout {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .profile-sidebar {
+    width: 200px;
+    align-items: center;
+  }
+  .sys-badge {
+    width: 100%;
+    align-items: center;
+  }
+  .term-body {
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+  .cmd-output {
+    margin-bottom: 1rem;
+  }
+}
+</style>

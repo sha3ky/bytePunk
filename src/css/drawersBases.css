@@ -1,11 +1,11 @@
 .cyber-card {
-  border: 1px solid #0ff;
-
+  border: 1px solid rgba(0, 255, 255, 0.35);
   box-shadow:
-    0 0 15px #0ff5,
-    0 0 30px #f0f;
-  /*   backdrop-filter: blur(3px);
- */
+    0 0 12px rgba(0, 255, 255, 0.4),
+    0 0 35px rgba(180, 0, 255, 0.25),
+    inset 0 0 20px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
 }
 .planet-box {
   width: 100%;

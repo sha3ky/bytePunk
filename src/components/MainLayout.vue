@@ -9,9 +9,6 @@
 
         <!-- CONTENIDO PRINCIPAL -->
         <div v-else>
-          <!-- Imagen de fondo -->
-          <div class="background"></div>
-
           <!-- Partículas -->
           <vue-particles
             v-if="showParticle"
@@ -55,23 +52,28 @@
         </div>
       </q-page>
 
-      <DrawerInicio v-model="drawers.right" />
+      <DrawerInicio v-model="drawers.right" @open-projects="openProyectos" />
       <DrawerProyectos v-model="drawers.bottom" />
       <DrawerSobreMi v-model="drawers.left" />
+      <DrawerContacto v-model="drawers.top" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script setup>
 import { ref, reactive, onMounted, computed, watch } from 'vue'
+import { useQuasar } from 'quasar'
 
 import DrawerInicio from '../components/DrawerInicio.vue'
 import DrawerProyectos from 'src/components/DrawerProyectos.vue'
 import DrawerSobreMi from 'src/components/DrawerSobreMi.vue'
+import DrawerContacto from 'src/components/DrawerContacto.vue'
 import { useBoolean } from '../composable/useBoolean'
 
 // Usar el composable correctamente
 const { setBoolean, computedBoolean } = useBoolean()
+
+const $q = useQuasar()
 
 const loading = ref(true)
 const drawers = reactive({
@@ -81,8 +83,6 @@ const drawers = reactive({
   left: false,
 })
 const open = ref(false)
-const screenWidth = ref(window.innerWidth)
-/* const updateWidth = () => (screenWidth.value = window.innerWidth) */
 
 const items = [
   { label: 'Inicio' },
@@ -96,8 +96,8 @@ const toggleMenu = () => (open.value = !open.value)
 
 // Nuevo cálculo de posiciones radiales
 const getPosition = (i) => {
-  const isMobile = screenWidth.value < 768
-  const r = isMobile ? 100 : 140 // Radio para móvil y escritorio
+  const isMobile = $q.screen.width < 768
+  const r = isMobile ? 85 : 200 // Radio reactivo al resize
   const angles = [0, 90, 180, 270] // arriba, derecha, abajo, izquierda
   const angle = angles[i] * (Math.PI / 180)
 
@@ -142,13 +142,19 @@ const onItemClick = (item) => {
   }, 400) // espera la animación del menú radial
 }
 
+const openProyectos = () => {
+  drawers.right = false
+  setTimeout(() => {
+    drawers.bottom = true
+  }, 300)
+}
+
 const isAnyDrawerOpen = computed(() => {
   return drawers.top || drawers.right || drawers.bottom || drawers.left
 })
 
 // Watch que controla las partículas basado en los drawers
 watch(isAnyDrawerOpen, (newValue) => {
-  debugger
   if (newValue) {
     // Si algún drawer se abre → OCULTAR partículas
     setBoolean('noParticle', false)
@@ -158,15 +164,10 @@ watch(isAnyDrawerOpen, (newValue) => {
   }
 })
 onMounted(async () => {
-  // listener de resize
-  /*   window.addEventListener('resize', updateWidth)
-   */
-  // loading
-  window.addEventListener('load', () => {
-    setTimeout(() => {
-      loading.value = false
-    }, 500)
-  })
+  // Fix: use a direct timeout so loader always disappears
+  setTimeout(() => {
+    loading.value = false
+  }, 1200)
 })
 /* -------- Particles -------- */
 const particlesOptions = {
@@ -177,13 +178,13 @@ const particlesOptions = {
     modes: { repulse: { distance: 100, duration: 0.4 } },
   },
   particles: {
-    color: { value: ['#9c27b0', '#2196f3'] },
-    links: { color: '#ffffff', distance: 150, enable: true, opacity: 0.3, width: 1 },
-    move: { enable: true, speed: 2 },
-    number: { value: 80 },
-    opacity: { value: 0.6 },
+    color: { value: ['#bf5fff', '#00ffff', '#2196f3'] },
+    links: { color: '#00ffff', distance: 130, enable: true, opacity: 0.25, width: 1 },
+    move: { enable: true, speed: 1.5 },
+    number: { value: 90 },
+    opacity: { value: { min: 0.2, max: 0.7 } },
     shape: { type: 'circle' },
-    size: { value: { min: 1, max: 4 } },
+    size: { value: { min: 1, max: 3 } },
   },
   detectRetina: true,
   responsive: [
@@ -204,4 +205,94 @@ const particlesLoaded = async (container) => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.hero-section {
+  background: #050508;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.background {
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(90, 0, 180, 0.18) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(0, 180, 255, 0.15) 0%, transparent 55%),
+    radial-gradient(ellipse at 60% 80%, rgba(160, 0, 255, 0.12) 0%, transparent 50%),
+    #050508;
+  z-index: 0;
+}
+
+.particles-bg {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}
+
+.hero-title {
+  font-family: 'GlitchGoblin', Cyber, sans-serif;
+  font-size: clamp(2rem, 10vw, 4rem);
+  line-height: 1.1;
+  color: #fff;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+  text-shadow:
+    0 0 10px rgba(0, 255, 255, 0.6),
+    0 0 30px rgba(0, 255, 255, 0.3),
+    0 0 60px rgba(0, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.hero-subtitle {
+  font-size: clamp(0.9rem, 4vw, 1.3rem);
+  color: rgba(0, 255, 255, 0.75);
+  letter-spacing: 1.5px;
+  margin-bottom: 1.5rem;
+  font-family: monospace;
+  line-height: 1.4;
+  padding: 0 1rem;
+}
+
+.loader-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #050508;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loader-spinner {
+  font-family: Cyber;
+  font-size: clamp(1.5rem, 5vw, 3rem);
+  color: #00ffff;
+  letter-spacing: 4px;
+  animation: flicker 1.5s infinite ease-in-out;
+  text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45% { opacity: 0.85; }
+  50% { opacity: 0.3; }
+  55% { opacity: 0.9; }
+}
+</style>

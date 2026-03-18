@@ -1,174 +1,153 @@
 <template>
-  <!-- El drawer usa Quasar QDialog controlado con v-model -->
-  <!-- Estado local del drawer -->
-  <!-- Cuando se muestra -->
-  <!-- Cuando se oculta -->
   <q-dialog
     v-model="localVisible"
     position="bottom"
     maximized
     transition-show="slide-up"
     transition-hide="slide-down"
-    class="animated-drawerBottom"
+    @hide="onHide"
   >
-    <q-card class="cyber-card metal-drawer">
-      <!-- Botón de cerrar -->
-      <div>
-        <div class="close-btn-container">
-          <h4 class="text-h4 margins">Proyectos</h4>
-          <q-btn flat dense icon="close" color="red" @click="close" />
-        </div>
+    <q-card
+      class="cyber-card metal-drawer"
+      style="display: flex; flex-direction: column; height: 100vh"
+    >
+      <!-- Header -->
+      <div
+        class="close-btn-container"
+        style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0"
+      >
+        <h4 class="text-h4 margins" data-text="Proyectos">Proyectos</h4>
+        <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>
 
-      <q-card-section class="text-center">
-        <div class="row justify-start">
-          <!-- Columna izquierda: miniaturas -->
+      <!-- CONTENT AREA -->
+      <div class="content-area proj-content-area" style="flex: 1; overflow: hidden; padding: 2rem;">
+        <transition name="fade" mode="out-in">
+          
+          <!-- Placeholder (Ninguno seleccionado) -->
+          <div
+            v-if="!activeProject"
+            key="placeholder"
+            class="placeholder-msg flex flex-center"
+            style="height: 100%"
+          >
+            <div class="scanner-container text-center">
+              <q-icon name="radar" size="6rem" class="radar-spin" color="cyan" />
+              <h3 class="placeholder-title">SISTEMA EN ESPERA</h3>
+              <p class="placeholder-subtitle">
+                > ESTABLECIENDO CONEXIÓN CON REPOSITORIOS...<br>
+                > SELECCIONE UN NODO DE DATOS ABAJO PARA CARGAR EL HOLO-REGISTRO.
+              </p>
+            </div>
+          </div>
 
-          <div class="col-auto q-pa-md">
-            <div
-              class="q-gutter-y-sm"
-              style="
-                overflow-x: visible;
-                overflow-y: auto;
-                width: 300px;
-                max-width: 20vw;
-                max-height: 70vh;
-              "
-            >
-              <!--  <div v-for="(src, index) in images" :key="index" class="relative-position">
+          <!-- Proyecto Seleccionado -->
+          <div v-else key="project" class="project-row">
+            <!-- LEFT: iframe -->
+            <div class="video-col">
+              <div class="project-iframe-wrapper">
+                <div class="iframe-frame-corner top-left"></div>
+                <div class="iframe-frame-corner top-right"></div>
+                <div class="iframe-frame-corner bottom-left"></div>
+                <div class="iframe-frame-corner bottom-right"></div>
+                <iframe
+                  :key="activeProject.video"
+                  :src="activeProject.video"
+                  allow="autoplay; encrypted-media"
+                  allowfullscreen
+                  class="project-iframe"
+                  style="background-color: #000;"
+                ></iframe>
+              </div>
+            </div>
 
-                <q-img
-                  v-show="!showVideo || index !== indexZoomed"
-                  :ref="(el) => (thumbRef[index] = el)"
-                  class="cursor-pointer"
-                  :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
-                  style="border-radius: 3%/5%"
-                  :style="
-                    index === indexZoomed
-                      ? `
-          position: fixed;
-          top: ${screenWidth < 400 ? '28vh' : '33vh'};
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: clamp(250px, 48vw, 600px);
-          max-height: 78vh;
-          z-index: 2000;
-          border-radius: 12px;
-          transition: opacity 0.3s ease-in-out, filter 0.3s ease-in-out;`
-                      : void 0
-                  "
-                  :src="src"
-                  @click="zoomImage(index)"
-                  loading="lazy"
-                />
+            <!-- RIGHT: description -->
+            <div class="desc-col">
+              <div class="glass-panel desc-panel">
+                <div class="desc-header">
+                  <q-icon name="folder_open" color="cyan" size="2rem" />
+                  <h3 class="proj-title">{{ activeProject.label }}</h3>
+                </div>
 
-                <transition name="fade">
-                  <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
-                    <iframe
-                      :key="linkVideo"
-                      :src="linkVideo"
-                      allow="autoplay; encrypted-media"
-                      allowfullscreen
-                    ></iframe>
+                <div class="tech-chips">
+                  <span v-for="tech in activeProject.techs" :key="tech" class="cyber-chip">
+                    {{ tech }}
+                  </span>
+                </div>
 
-                  </div>
-                </transition>
-              </div> -->
+                <p class="proj-desc">
+                  <span class="prompt-arrow">></span> {{ activeProject.desc }}
+                </p>
 
-              <!-- En tu template -->
-              <div v-for="(src, index) in images" :key="index" class="relative-position">
-                <!-- Miniatura -->
-                <q-img
-                  v-show="!showVideo || index !== indexZoomed"
-                  :ref="(el) => (thumbRef[index] = el)"
-                  class="cursor-pointer"
-                  :class="index === indexZoomed ? 'fixed-top-right q-mr-md q-mt-md z-top' : void 0"
-                  style="border-radius: 3%/5%"
-                  :style="index === indexZoomed ? getZoomedImageStyle() : void 0"
-                  :src="src"
-                  @click="zoomImage(index)"
-                  loading="lazy"
-                />
-
-                <!-- Video -->
-                <transition name="slide-up">
-                  <div v-if="showVideo && index === indexZoomed" class="iframe-wrapper">
-                    <iframe
-                      :key="linkVideo"
-                      :src="linkVideo"
-                      allow="autoplay; encrypted-media"
-                      allowfullscreen
-                      class="video-iframe"
-                    ></iframe>
-                  </div>
-                </transition>
+                <div class="btn-container" v-if="activeProject.key === 'shiftclock'">
+                  <q-btn
+                    outline
+                    color="cyan"
+                    icon="launch"
+                    label="INICIAR DEMO INTERACTIVA"
+                    href="https://controlhorariox.netlify.app/#/"
+                    target="_blank"
+                    class="demo-btn"
+                  />
+                </div>
               </div>
             </div>
           </div>
+        </transition>
+      </div>
 
-          <!-- Columna derecha: contenido “aaa” -->
-          <div class="content-placeholder">
-            <p style="color: white" class="descripcionProyecto">
-              {{ videoNotes }}
-            </p>
-
-            <div
-              v-if="showLinkControlHorario"
-              class="flex flex-center"
-              style="max-width: 50vh; margin: 0 auto"
-            >
-              <q-item
-                clickable
-                v-ripple
-                href="https://controlhorariox.netlify.app/#/"
-                target="_blank"
-                style="color: white; border: 1px solid white; border-radius: 4px"
-                class="q-px-lg q-py-sm"
-              >
-                <q-item-section avatar>
-                  <q-icon name="launch" color="white" />
-                </q-item-section>
-
-                <q-item-section> Control Horario (Proyecto Local) </q-item-section>
-              </q-item>
-            </div>
+      <!-- CAROUSEL bottom -->
+      <div class="bottom-panel">
+        <div class="carousel-track">
+          <div
+            v-for="project in projects"
+            :key="project.key"
+            class="carousel-thumb"
+            :class="{ active: activeProject && activeProject.key === project.key }"
+            @click="selectProject(project)"
+          >
+            <div class="thumb-overlay"></div>
+            <q-img
+              :src="project.img"
+              :ratio="16 / 9"
+              fit="cover"
+              style="width: 100%; border-radius: 4px; background: #050508;"
+              loading="lazy"
+            />
+            <span class="thumb-label">[ {{ project.label }} ]</span>
           </div>
         </div>
-      </q-card-section>
+      </div>
     </q-card>
-  </q-dialog>
+  </q-dialog>>
 </template>
 
 <script setup>
-/*
-  🔧 IMPORTS
-  - ref, watch, onMounted, onUnmounted → control del ciclo de vida
-  - nextTick → asegura que el DOM esté renderizado antes de manipularlo
-  - useQuasar → acceso a info de pantalla (breakpoints)
-  - initPlanet → tu efecto 3D personalizado
-*/
-import { ref, watch, onMounted, onUnmounted, onBeforeUpdate, nextTick } from 'vue'
-import { morph } from 'quasar'
-const screenWidth = ref(0)
-/*
-  🧩 Props
-  - El padre controla la visibilidad con v-model o :visible.
-  - Aquí usamos v-model simplificado (modelValue).
-*/
+import { ref, watch } from 'vue'
+
 const props = defineProps({
   modelValue: { type: Boolean, required: true },
 })
-/*
-  🔁 Emits
-  - update:modelValue → comunicación reactiva con el padre (v-model)
-  - shown, hidden → eventos personalizados por si el padre quiere escuchar
-*/
-const emit = defineEmits(['update:modelValue', 'shown', 'hidden'])
+const emit = defineEmits(['update:modelValue'])
+
 const localVisible = ref(props.modelValue)
-const showLinkControlHorario = ref(false)
-/* zoom imagenes */
-const thumbRef = ref([])
-const indexZoomed = ref(void 0)
+watch(
+  () => props.modelValue,
+  (val) => {
+    localVisible.value = val
+  },
+)
+watch(localVisible, (val) => emit('update:modelValue', val))
+
+function close() {
+  localVisible.value = false
+}
+function onHide() {
+  activeProject.value = null
+  emit('update:modelValue', false)
+}
+
+/* ---- Data ---- */
 const arrayimages = [
   'dnsDynamic',
   'dustrbike',
@@ -178,30 +157,45 @@ const arrayimages = [
   'shiftclock',
   'smartStudy',
 ]
-const images = ref(
-  Array(7)
-    .fill(null)
-    .map((_, i) => '/imagenes/appsimg2/' + arrayimages[i] + '.webp'),
-)
+
+const labelMap = {
+  dnsDynamic: 'DNS Dynamic',
+  dustrbike: 'DustrBike',
+  jtcars: 'JT Cars',
+  lottery: 'Lottery',
+  plantsIA: 'Plants IA',
+  shiftclock: 'ShiftClock',
+  smartStudy: 'SmartStudy',
+}
+
+const techMap = {
+  dnsDynamic: ['Vue 3', 'Tailwind', 'Prototypado Rápido'],
+  dustrbike: ['Quasar', 'Three.js', 'UI Experimental'],
+  jtcars: ['Django', 'Vue 3', 'PostgreSQL'],
+  lottery: ['Vue', 'Lógica Interactiva', 'UX/UI'],
+  smartStudy: ['AI Agents', 'OpenAI', 'Educación'],
+  shiftclock: ['Local-First', 'SQLite', 'Seguridad'],
+  plantsIA: ['Python AI', 'Visión Artificial', 'Vue']
+}
+
 const descripcionVideo = {
   dnsDynamic:
-    'Proyecto ágil desarrollado para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo. La comunicación continua nos ayuda a pulir posibles bugs.',
+    'Proyecto ágil para un cliente que necesitaba una solución visualmente atractiva y funcional en muy poco tiempo.',
   dustrbike:
-    'Experimento inicial con Quasar Framework para poner a prueba sus límites. Aún en desarrollo y mejora continua, implementar un lazy-loading ayudaría a eliminar esos efectos de carga. En breve añadiré mejoras y optimizaciones.',
+    'Experimento inicial con Quasar Framework para poner a prueba sus límites. Aún en desarrollo y mejora continua.',
   jtcars:
-    'Proyecto fullstack para el mundo auto. Fue un comienzo con el django y la verdad descubrí la facilidad que tiene este framework para escalar y para usar. Proyecto completado y desplegado a la espera de cambiar del dominio provisional al definitivo.',
+    'Proyecto fullstack consolidado para el mundo automotor. Backend sólido en Django combinado con un frontend responsivo. Arquitectura enfocada en escalabilidad.',
   lottery:
-    'Proyecto en desarrollo, la unión de frontend, backend, movimientos, sonidos, lógica es algo que me motiva para seguir utilizando distintas herramientas de lo más variadas. Proyecto en fase de testing.',
-  smartStudy:
-    'Proyecto divertido para niños que quieran aprender con la ayuda de una IA. Pendiente de cambiar por una IA más inteligente en un futuro próximo.',
+    'Unión de frontend, backend, movimientos fluidos, ruteadores de audio inmersivos y lógica de estado en fase de testing visual.',
+  smartStudy: 
+    'App gamificada diseñada para facilitar el aprendizaje de forma segura e independiente.',
   shiftclock:
-    'Otro proyecto para quien necesite simpleza, robustez, todo local, sin acceso externo. Enlace para los interesados para un control horario fácil de usar.',
+    'Para quien necesite extrema simplicidad y absoluta privacidad. Control horario robusto, fácil de usar, todo en local y sin requerir red.',
   plantsIA:
-    'Proyecto fullstack en estado avanzado. Uno de mis primeros proyectos donde he insertado una IA específica. La IA es en versión base, funciona a las mil maravillas pero aún así a veces me encuentro algún que otro bug.',
+    'Proyecto backend-heavy avanzado integrado con modelos de IA para el procesamiento en tiempo real. Alta perfomance.',
 }
 
 const videosDeProyecto = {
-  // Clave (Key)     : Valor (Value)
   dnsDynamic:
     'https://www.youtube.com/embed/AMAIv0ZH1hs?si=fv4n7gWfr52njJV&autoplay=1&mute=1&rel=0&modestbranding=1',
   dustrbike:
@@ -218,136 +212,324 @@ const videosDeProyecto = {
     'https://www.youtube.com/embed/Y8Xxh1kEirM?si=XoUzJc_7niYdtM0Y&autoplay=1&mute=1&rel=0&modestbranding=1',
 }
 
-const showVideo = ref(false)
-const linkVideo = ref('')
-const videoNotes = ref('')
+const projects = arrayimages.map((key) => ({
+  key,
+  label: labelMap[key],
+  img: `/imagenes/appsimg2/${key}.webp`,
+  video: videosDeProyecto[key],
+  desc: descripcionVideo[key],
+  techs: techMap[key] || ['Tecnología Cypher']
+}))
 
-function getVideoUrlAndData(index) {
-  const key = arrayimages[index] // p.ej. 'dnsDynamic'
-  return key || '' // fallback vacío si no hay match
-}
-const getZoomedImageStyle = () => {
-  const isMobile = screenWidth.value < 400
-  return {
-    position: 'fixed',
-    top: isMobile ? '28vh' : '33vh',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 'clamp(250px, 75vw, 800px)',
-    height: 'calc(clamp(250px, 75vw, 800px) * 9/16)', // Misma proporción 16:9
-    maxHeight: '78vh',
-    zIndex: '2000',
-    borderRadius: '12px',
-    transition: 'opacity 0.3s ease-in-out, filter 0.3s ease-in-out',
-  }
-}
-async function zoomImage(index) {
-  const prev = indexZoomed.value
+const activeProject = ref(null)
 
-  // Si hacemos click en la misma imagen que ya está ampliada, cerrar
-  if (index === prev) {
-    // Cerrar la actual
-    showVideo.value = false
-    linkVideo.value = ''
-    indexZoomed.value = void 0
-
-    if (prev !== void 0) {
-      morph({
-        from: thumbRef.value[prev].$el,
-        duration: 300,
-      })
-    }
+function selectProject(project) {
+  if (activeProject.value?.key === project.key) {
+    activeProject.value = null
     return
   }
-
-  // 1) Apagar vídeo actual y limpiar
-  showVideo.value = false
-  linkVideo.value = ''
-  await nextTick()
-
-  // 2) Preparar nuevo contenido ANTES de animar
-  let key = getVideoUrlAndData(index)
-  linkVideo.value = videosDeProyecto[key]
-  videoNotes.value = descripcionVideo[key]
-  showLinkControlHorario.value = key === 'shiftclock'
-
-  // 3) Resetear el zoom anterior
-  indexZoomed.value = void 0
-
-  // 4) Si hay una imagen anterior abierta, cerrarla primero
-  if (prev !== void 0) {
-    await new Promise((resolve) => {
-      morph({
-        from: thumbRef.value[prev].$el,
-        duration: 300,
-        onEnd: resolve,
-      })
-    })
-    await nextTick()
-  }
-
-  // 5) Abrir nueva imagen
-  if (index !== void 0) {
-    morph({
-      from: thumbRef.value[index].$el,
-      onToggle: () => {
-        indexZoomed.value = index
-      },
-      duration: 500,
-      onEnd: async (end) => {
-        // Si la animación termina en el estado "from" (cerrado)
-        if (end === 'from' && indexZoomed.value === index) {
-          showVideo.value = false
-          linkVideo.value = ''
-          indexZoomed.value = void 0
-          await nextTick()
-        }
-        // Si la animación termina en el estado "to" (abierto)
-        else if (end === 'to' && indexZoomed.value === index) {
-          // Encender el vídeo solo si hay URL válida después de la animación
-          showVideo.value = !!linkVideo.value
-        }
-      },
-    })
-  }
+  activeProject.value = null
+  setTimeout(() => {
+    activeProject.value = project
+  }, 120)
 }
 
-/*🚪 Función de cierre manual
-  - Permite cerrar el drawer desde dentro o desde el padre si se expone.*/
-
-function close() {
-  localVisible.value = false
-}
-
-watch(
-  () => props.modelValue,
-  (val) => (console.log('propsEmit', props.modelValue), (localVisible.value = val)),
-)
-
-watch(localVisible, (val) => emit('update:modelValue', val))
-
-/*♻️ Limpieza en desmontaje*/
-
-onMounted(async () => {
-  screenWidth.value = window.innerWidth
-  window.addEventListener('resize', () => {
-    screenWidth.value = window.innerWidth
-  })
-})
-
-onUnmounted(() => {
-  window.removeEventListener('resize', () => {
-    screenWidth.value = window.innerWidth
-  })
-})
-onBeforeUpdate(() => {
-  thumbRef.value = []
-})
-
-/*
-  🪄 defineExpose
-  - Permite al padre acceder a métodos internos si lo necesita.
-  - Ej: this.$refs.drawer.close()
-*/
 defineExpose({ close })
 </script>
+
+<style scoped>
+/* Placeholder Radar */
+.radar-spin {
+  animation: radar-sweep 3s linear infinite;
+  opacity: 0.8;
+  filter: drop-shadow(0 0 15px rgba(0, 255, 255, 0.7));
+  margin-bottom: 1.5rem;
+}
+
+@keyframes radar-sweep {
+  100% { transform: rotate(360deg); }
+}
+
+.placeholder-title {
+  font-family: 'Cyber', sans-serif;
+  font-size: 2rem;
+  color: #fff;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+  margin: 0 0 0.5rem;
+}
+
+.placeholder-subtitle {
+  font-family: monospace;
+  font-size: 0.9rem;
+  color: rgba(200, 200, 255, 0.7);
+  line-height: 1.6;
+}
+
+/* Side-by-side layout (Grid) */
+.project-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  height: 100%;
+  align-items: center;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.video-col {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-width: 0;
+  width: 100%;
+}
+
+/* Custom Iframe Styling */
+.project-iframe-wrapper {
+  position: relative;
+  width: 100%;
+  padding: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 255, 255, 0.25);
+  border-radius: 8px;
+  box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.iframe-frame-corner {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border: 2px solid #00ffff;
+  pointer-events: none;
+  z-index: 10;
+}
+.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
+.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
+.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+.project-iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: none;
+  border-radius: 4px;
+  display: block;
+}
+
+.desc-col {
+  display: flex;
+  align-items: stretch;
+  min-width: 0;
+  width: 100%;
+}
+
+.glass-panel {
+  background: rgba(0, 20, 40, 0.5);
+  border: 1px solid rgba(0, 255, 255, 0.15);
+  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(12px);
+  border-radius: 12px;
+  padding: 2rem;
+}
+
+.desc-panel {
+  width: 100%;
+  height: auto;
+  max-height: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.3) transparent;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (max-width: 600px) {
+  .desc-panel {
+    padding: 1.25rem;
+  }
+  .proj-title {
+    font-size: 1.8rem;
+  }
+}
+
+.desc-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.proj-title {
+  font-family: 'Cyber', sans-serif;
+  font-size: 2.2rem;
+  color: #fff;
+  margin: 0;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  letter-spacing: 2px;
+}
+
+.tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.cyber-chip {
+  font-family: monospace;
+  font-size: 0.75rem;
+  padding: 0.3rem 0.6rem;
+  background: rgba(0, 255, 255, 0.1);
+  border: 1px solid rgba(0, 255, 255, 0.3);
+  color: #00ffff;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.proj-desc {
+  font-family: monospace;
+  font-size: 0.95rem;
+  color: rgba(220, 220, 255, 0.85);
+  line-height: 1.7;
+  flex: 1;
+}
+
+.prompt-arrow {
+  color: #00ffff;
+  font-weight: bold;
+  margin-right: 0.4rem;
+}
+
+.btn-container {
+  margin-top: 1.5rem;
+}
+
+.demo-btn {
+  width: 100%;
+  font-family: 'Cyber', sans-serif;
+  letter-spacing: 2px;
+  font-size: 0.9rem;
+  padding: 0.6rem;
+}
+
+/* Mobile: stack vertically */
+@media (max-width: 900px) {
+  .proj-content-area {
+    padding: 1rem !important;
+  }
+  .project-row {
+    grid-template-columns: 1fr;
+    overflow-y: auto;
+    gap: 1.5rem;
+    align-items: start;
+  }
+}
+
+/* Carousel */
+.bottom-panel {
+  flex-shrink: 0;
+  background: rgba(0, 10, 20, 0.8);
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+  padding: 1rem 1.5rem;
+  backdrop-filter: blur(10px);
+}
+
+.carousel-track {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 255, 0.4) transparent;
+}
+
+.carousel-track::-webkit-scrollbar {
+  height: 6px;
+}
+.carousel-track::-webkit-scrollbar-track {
+  background: rgba(255,255,255,0.05);
+  border-radius: 4px;
+}
+.carousel-track::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 255, 0.4);
+  border-radius: 4px;
+}
+
+.carousel-thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(140px, 15vw, 200px);
+  cursor: pointer;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 255, 255, 0.2);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  background: #000;
+}
+
+.thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 255, 255, 0.15);
+  z-index: 1;
+  transition: background 0.3s;
+}
+
+.carousel-thumb:hover {
+  border-color: rgba(0, 255, 255, 0.8);
+  transform: translateY(-4px);
+  box-shadow: 0 5px 15px rgba(0, 255, 255, 0.2);
+}
+
+.carousel-thumb:hover .thumb-overlay {
+  background: transparent;
+}
+
+.carousel-thumb.active {
+  border-color: #00ffff;
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+  transform: scale(1.02);
+}
+
+.carousel-thumb.active .thumb-overlay {
+  background: transparent;
+}
+
+.thumb-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.85);
+  text-align: center;
+  padding: 0.4rem 0.5rem;
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: rgba(200, 255, 255, 0.7);
+  letter-spacing: 1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 2;
+  border-top: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.carousel-thumb.active .thumb-label {
+  color: #00ffff;
+  background: rgba(0, 40, 60, 0.9);
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>

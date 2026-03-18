@@ -3,13 +3,34 @@
 }
 
 body {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: center;
+  margin: 0;
+  padding: 0;
   min-height: 100vh;
   font-family: 'Cyber', sans-serif;
-  background: linear-gradient(90deg, #f5ed00 70%, #e6de00 70%), #fff700;
+  background-color: #000;
+  color: #fff;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-image: url('/imagenes/rain-city.jpg');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  filter: brightness(0.35) contrast(1.1);
+  z-index: -10;
+  pointer-events: none;
+}
+
+/* Forzar transparencia en capas de Quasar */
+.q-layout, .q-page-container, .q-page, .q-layout__section--main {
+  background: transparent !important;
 }
 
 body .cybr-btn + .cybr-btn {
@@ -119,27 +140,40 @@ body .cybr-btn + .cybr-btn {
 }
 @media (max-width: 768px) {
   .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
+    /* Permitir que actúe el clamp de MainLayout */
+    line-height: 1.1;
   }
 
   .radial-menu {
-    height: 50vh;
+    height: 60vh;
   }
 
   .radial-item {
-    width: 150px;
-    height: 40px;
-    font-size: 0.9rem;
+    width: 110px !important;
+    height: 40px !important;
+    font-size: 0.8rem !important;
+    letter-spacing: 0.5px;
+    -webkit-clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+    clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+  }
+
+  /* Refinando the shape text overlay to match the button */
+  .radial-item .span {
+    -webkit-clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+    clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
   }
 
   .center-btn {
-    width: 150px;
-    height: 40px;
-    font-size: 0.9rem;
+    width: 60px !important;
+    height: 40px !important;
+    font-size: 1.2rem !important;
+    -webkit-clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+    clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+  }
+  
+  .center-btn .span {
+    -webkit-clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
+    clip-path: polygon(8% 0, 92% 0, 100% 12%, 100% 88%, 92% 100%, 8% 100%, 0% 88%, 0% 12%);
   }
 }
 /* botón Proyectos: look neon/cyber limpio */
@@ -216,19 +250,6 @@ body .cybr-btn + .cybr-btn {
   justify-content: center;
 }
 
-/* Imagen de fondo */
-.background {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: url('/imagenes/circuito.webp') no-repeat center center;
-  background-size: cover;
-  filter: brightness(0.4);
-  z-index: 0;
-}
-
 /* Capa de partículas */
 .particles-bg {
   position: absolute;
@@ -251,11 +272,12 @@ body .cybr-btn + .cybr-btn {
 
 .hero-title {
   font-family: 'GlitchGoblin', sans-serif;
-  font-size: 4rem;
   font-weight: bolder;
   color: #fcee09;
   position: relative;
   letter-spacing: 2px;
+  white-space: nowrap;
+  line-height: 1;
   text-shadow:
     0 0 5px #fcee09,
     0 0 15px #fcee09,
@@ -358,7 +380,6 @@ body .cybr-btn + .cybr-btn {
 
 .hero-subtitle {
   font-family: 'Cyber', sans-serif;
-  font-size: 2rem;
   font-weight: 500;
   color: #ffffff;
   letter-spacing: 1px;
@@ -368,18 +389,7 @@ body .cybr-btn + .cybr-btn {
     0 0 5px rgba(255, 255, 255, 0.2),
     0 0 10px rgba(0, 234, 255, 0.1);
 }
-
-.hero-subtitle {
-  font-family: 'Cyber', sans-serif;
-  font-size: 2rem;
-}
 @media (max-width: 600px) {
-  .iframe-wrapper {
-    top: 20vh; /* más arriba */
-    left: 65%; /* centrado */
-    width: 62vw; /* usa casi todo el ancho */
-    box-shadow: 0 0 15px rgba(0, 255, 255, 0.15);
-  }
   .hero-subtitle {
     font-family: 'Cyber', sans-serif;
     font-size: 1rem;

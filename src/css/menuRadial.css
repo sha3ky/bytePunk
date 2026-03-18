@@ -11,9 +11,9 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  width: clamp(60px, 35vw, 50px);
-  height: clamp(48px, 7vh, 45px);
-  font-size: 0.75rem;
+  width: 70px !important;
+  height: 50px !important;
+  font-size: 1.2rem !important;
   z-index: 3;
 }
 
@@ -24,8 +24,9 @@
 }
 
 .radial-item {
-  width: 200px;
-  height: 45px;
+  width: 220px !important;
+  height: 50px !important;
+  font-size: 1rem !important;
   cursor: pointer;
 }
 
@@ -56,27 +57,7 @@
 }
 
 @media (max-width: 768px) {
-  .hero-title {
-    font-size: 2.5rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-
   .radial-menu {
-    height: 50vh;
-  }
-
-  .radial-item {
-    width: 150px;
-    height: 40px;
-    font-size: 0.9rem;
-  }
-
-  .center-btn {
-    width: 40px;
-    height: 40px;
-    font-size: 0.9rem;
+    height: 60vh;
   }
 }

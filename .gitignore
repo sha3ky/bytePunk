@@ -56,4 +56,9 @@ yarn-error.log*
 Thumbs.db
 *.swp
 *~
-
+.idx/
+.antigravity/
+__pycache__/
+*.pyc
+.env
+db.sqlite3

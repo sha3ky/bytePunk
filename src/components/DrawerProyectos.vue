@@ -1,7 +1,6 @@
 <template>
   <q-dialog
     v-model="localVisible"
-    position="bottom"
     maximized
     transition-show="slide-up"
     transition-hide="slide-down"
@@ -9,12 +8,12 @@
   >
     <q-card
       class="cyber-card metal-drawer"
-      style="display: flex; flex-direction: column; height: 100vh"
+      style="display: flex; flex-direction: column; height: 100dvh"
     >
       <!-- Header -->
       <div
         class="close-btn-container"
-        style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0"
+        style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem;"
       >
         <h4 class="text-h4 margins" data-text="Proyectos">Proyectos</h4>
         <q-btn flat dense icon="close" color="cyan" @click="close" />

@@ -11,18 +11,14 @@
       style="display: flex; flex-direction: column; height: 100dvh"
     >
       <!-- Header -->
-      <div
-        class="close-btn-container"
-        style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.25rem;"
-      >
+      <div class="close-btn-container">
         <h4 class="text-h4 margins" data-text="Proyectos">Proyectos</h4>
         <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>
 
       <!-- CONTENT AREA -->
-      <div class="content-area proj-content-area" style="flex: 1; overflow: hidden; padding: 2rem;">
+      <div class="content-area proj-content-area" style="flex: 1; overflow: hidden; padding: 2rem">
         <transition name="fade" mode="out-in">
-          
           <!-- Placeholder (Ninguno seleccionado) -->
           <div
             v-if="!activeProject"
@@ -34,7 +30,7 @@
               <q-icon name="radar" size="6rem" class="radar-spin" color="cyan" />
               <h3 class="placeholder-title">SISTEMA EN ESPERA</h3>
               <p class="placeholder-subtitle">
-                > ESTABLECIENDO CONEXIÓN CON REPOSITORIOS...<br>
+                > ESTABLECIENDO CONEXIÓN CON REPOSITORIOS...<br />
                 > SELECCIONE UN NODO DE DATOS ABAJO PARA CARGAR EL HOLO-REGISTRO.
               </p>
             </div>
@@ -55,7 +51,7 @@
                   allow="autoplay; encrypted-media"
                   allowfullscreen
                   class="project-iframe"
-                  style="background-color: #000;"
+                  style="background-color: #000"
                 ></iframe>
               </div>
             </div>
@@ -110,15 +106,15 @@
               :src="project.img"
               :ratio="16 / 9"
               fit="cover"
-              style="width: 100%; border-radius: 4px; background: #050508;"
+              style="width: 100%; border-radius: 4px; background: #050508"
               loading="lazy"
             />
             <span class="thumb-label">[ {{ project.label }} ]</span>
           </div>
         </div>
       </div>
-    </q-card>
-  </q-dialog>>
+    </q-card> </q-dialog
+  >>
 </template>
 
 <script setup>
@@ -174,7 +170,7 @@ const techMap = {
   lottery: ['Vue', 'Lógica Interactiva', 'UX/UI'],
   smartStudy: ['AI Agents', 'OpenAI', 'Educación'],
   shiftclock: ['Local-First', 'SQLite', 'Seguridad'],
-  plantsIA: ['Python AI', 'Visión Artificial', 'Vue']
+  plantsIA: ['Python AI', 'Visión Artificial', 'Vue'],
 }
 
 const descripcionVideo = {
@@ -186,7 +182,7 @@ const descripcionVideo = {
     'Proyecto fullstack consolidado para el mundo automotor. Backend sólido en Django combinado con un frontend responsivo. Arquitectura enfocada en escalabilidad.',
   lottery:
     'Unión de frontend, backend, movimientos fluidos, ruteadores de audio inmersivos y lógica de estado en fase de testing visual.',
-  smartStudy: 
+  smartStudy:
     'App gamificada diseñada para facilitar el aprendizaje de forma segura e independiente.',
   shiftclock:
     'Para quien necesite extrema simplicidad y absoluta privacidad. Control horario robusto, fácil de usar, todo en local y sin requerir red.',
@@ -214,10 +210,13 @@ const videosDeProyecto = {
 const projects = arrayimages.map((key) => ({
   key,
   label: labelMap[key],
-  img: `/imagenes/appsimg2/${key}.webp`,
+  // Imagen dinámica del proyecto basada en la iteración
+  img: `/imagenes/appsimg2/logoEmpresaIco.ico`,
+  // Logo corporativo (ruta relativa al servidor web, no absoluta de sistema)
+  /* logo: `/imagenes/svg/logoEmpresa.svg`, */
   video: videosDeProyecto[key],
   desc: descripcionVideo[key],
-  techs: techMap[key] || ['Tecnología Cypher']
+  techs: techMap[key] || ['Tecnología Cypher'],
 }))
 
 const activeProject = ref(null)
@@ -246,7 +245,9 @@ defineExpose({ close })
 }
 
 @keyframes radar-sweep {
-  100% { transform: rotate(360deg); }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .placeholder-title {
@@ -306,10 +307,30 @@ defineExpose({ close })
   pointer-events: none;
   z-index: 10;
 }
-.top-left { top: -2px; left: -2px; border-right: none; border-bottom: none; }
-.top-right { top: -2px; right: -2px; border-left: none; border-bottom: none; }
-.bottom-left { bottom: -2px; left: -2px; border-right: none; border-top: none; }
-.bottom-right { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+.top-left {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+.top-right {
+  top: -2px;
+  right: -2px;
+  border-left: none;
+  border-bottom: none;
+}
+.bottom-left {
+  bottom: -2px;
+  left: -2px;
+  border-right: none;
+  border-top: none;
+}
+.bottom-right {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
 
 .project-iframe {
   width: 100%;
@@ -329,7 +350,9 @@ defineExpose({ close })
 .glass-panel {
   background: rgba(0, 20, 40, 0.5);
   border: 1px solid rgba(0, 255, 255, 0.15);
-  box-shadow: inset 0 0 20px rgba(0, 255, 255, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5);
+  box-shadow:
+    inset 0 0 20px rgba(0, 255, 255, 0.05),
+    0 10px 30px rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 2rem;
@@ -451,7 +474,7 @@ defineExpose({ close })
   height: 6px;
 }
 .carousel-track::-webkit-scrollbar-track {
-  background: rgba(255,255,255,0.05);
+  background: rgba(255, 255, 255, 0.05);
   border-radius: 4px;
 }
 .carousel-track::-webkit-scrollbar-thumb {

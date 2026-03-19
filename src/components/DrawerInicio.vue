@@ -11,7 +11,7 @@
   >
     <q-card class="cyber-card metal-drawer inicio-card">
       <!-- Header -->
-      <div class="close-btn-container" style="border-bottom: 1px solid rgba(0, 255, 255, 0.2)">
+      <div class="close-btn-container">
         <h4 class="text-h4 margins text" data-text="Inicio">Inicio</h4>
         <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>

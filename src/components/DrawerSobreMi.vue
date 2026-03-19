@@ -11,7 +11,7 @@
   >
     <q-card class="cyber-card metal-drawer sobremi-card">
       <!-- Header -->
-      <div class="close-btn-container" style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0; display: flex; justify-content: space-between; align-items: center; padding: 1.25rem;">
+      <div class="close-btn-container">
         <h4 class="text-h4 margins" data-text="Sobre Mí">Sobre Mí</h4>
         <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>

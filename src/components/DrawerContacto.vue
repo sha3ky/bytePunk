@@ -8,7 +8,7 @@
   >
     <q-card class="cyber-card metal-drawer" style="display: flex; flex-direction: column; height: 100dvh;">
       <!-- Header -->
-      <div class="close-btn-container" style="border-bottom: 1px solid rgba(0, 255, 255, 0.2); flex-shrink: 0;">
+      <div class="close-btn-container">
         <h4 class="text-h4 margins" data-text="Terminal de Contacto">Terminal de Contacto</h4>
         <q-btn flat dense icon="close" color="cyan" @click="close" />
       </div>
